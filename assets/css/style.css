@@ -233,8 +233,8 @@ main {
     radial-gradient(520px 360px at 22% 30%, rgba(255, 255, 255, 0.08), transparent),
     radial-gradient(620px 420px at 78% 60%, rgba(153, 199, 255, 0.08), transparent);
   mix-blend-mode: screen;
-  backdrop-filter: blur(50px) saturate(150%);
-  -webkit-backdrop-filter: blur(50px) saturate(150%);
+  backdrop-filter: blur(32px) saturate(130%);
+  -webkit-backdrop-filter: blur(32px) saturate(130%);
   opacity: 0.9;
 }
 
@@ -249,9 +249,27 @@ main {
 
 @supports not (backdrop-filter: blur(1px)) {
   #aurora-glass {
-    filter: blur(50px);
+    filter: blur(32px);
     background: rgba(16, 18, 22, 0.45);
     mix-blend-mode: normal;
+  }
+}
+
+@media (max-width: 768px) {
+  #aurora-glass {
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    opacity: 0.75;
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    #aurora-glass {
+      filter: blur(18px);
+    }
+  }
+
+  #liquid-aurora {
+    opacity: 0.3;
   }
 }
 

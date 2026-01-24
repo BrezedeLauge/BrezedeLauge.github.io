@@ -23,10 +23,10 @@
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Zur Startseite">
         <div class="brand-logo">
-          <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
+          <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo" loading="lazy">
           <div class="powered-by">
             <span class="powered-text">powered by</span>
-            <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
+            <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo" loading="lazy">
           </div>
         </div>
       </a>
@@ -238,10 +238,10 @@
       <div class="footer-content">
         <div class="footer-brand">
           <div class="footer-logo">
-            <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="footer-lineiq-logo">
+            <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="footer-lineiq-logo" loading="lazy">
             <div class="footer-powered-by">
               <span class="footer-powered-text">powered by</span>
-              <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="footer-sontheimer-logo">
+              <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="footer-sontheimer-logo" loading="lazy">
             </div>
           </div>
           <p>Moderne Dashboard-Lösung für Industrieanwendungen</p>
@@ -308,14 +308,15 @@
         try {
           if (localStorage.getItem(cookieKey) === '1') return true;
         } catch (e) { /* ignore */ }
-        return document.cookie.split(';').some(c => c.trim() === cookieKey + '=1');
+        return document.cookie.split(';').some(c => c.trim() === `${cookieKey}=1`);
       };
 
       const setConsent = () => {
         try {
           localStorage.setItem(cookieKey, '1');
         } catch (e) { /* ignore */ }
-        document.cookie = `${cookieKey}=1; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
+        const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${cookieKey}=1; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax${secure}`;
       };
 
       if (!hasConsent()) {

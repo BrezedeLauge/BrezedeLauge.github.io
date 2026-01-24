@@ -13,6 +13,7 @@ class LiquidAurora {
     this.gl = null;
     this.program = null;
     this.uniformLocations = {};
+    this.dprCap = 2.0;
 
     // Attractors: { element, x, y, strength, targetStrength, fadeSpeed, isPermanent, isGlowing }
     this.attractors = [];
@@ -53,6 +54,9 @@ class LiquidAurora {
   }
 
   init() {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || /Mobi|Android/i.test(navigator.userAgent || '');
+    if (isMobile) this.applyMobileTuning();
+
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (this.reducedMotion) {
       this.ensureGlassLayer();
@@ -84,6 +88,16 @@ class LiquidAurora {
     glass.id = 'aurora-glass';
     glass.setAttribute('aria-hidden', 'true');
     document.body.appendChild(glass);
+  }
+
+  applyMobileTuning() {
+    this.dprCap = 1.5;
+    this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.6);
+    this.config.canvasOpacity = Math.min(this.config.canvasOpacity, 0.32);
+    this.config.baseDriftSpeed = Math.min(this.config.baseDriftSpeed, 0.00012);
+    this.config.glowStrength = Math.min(this.config.glowStrength, 0.32);
+    this.config.colorIntensity = Math.min(this.config.colorIntensity, 0.26);
+    this.maxAttractors = Math.min(this.maxAttractors, 6);
   }
 
   initStaticFallback() {
@@ -139,7 +153,7 @@ class LiquidAurora {
 
   resizeCanvas() {
     if (!this.canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, this.dprCap);
     const w = window.innerWidth;
     const h = window.innerHeight;
 
