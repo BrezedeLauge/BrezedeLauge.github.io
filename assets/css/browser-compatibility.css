@@ -1,5 +1,36 @@
 /* Opera GX and Chromium Browser Compatibility Fix */
 
+/* Logo Size Constraints */
+.lineiq-logo {
+  max-width: 180px !important;
+  max-height: 60px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.sontheimer-logo {
+  max-width: 120px !important;
+  max-height: 40px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.brand-logo {
+  max-width: 300px !important;
+  align-items: flex-start !important;
+}
+
+.powered-by {
+  align-items: flex-start !important;
+  gap: 8px !important;
+}
+
+.powered-text {
+  font-size: 12px !important;
+  opacity: 0.7 !important;
+  white-space: nowrap !important;
+}
+
 /* Add webkit prefixes for all backdrop-filter usage */
 .glass,
 .nav-link,
@@ -93,4 +124,58 @@
   .section-title-new {
     font-size: 36px !important;
   }
+}
+
+/* Content Formatting Fixes for Opera GX */
+.container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+}
+
+.main-centered {
+  text-align: center !important;
+  margin: 0 auto !important;
+}
+
+.hero-main {
+  padding: 80px 0 !important;
+  text-align: center !important;
+}
+
+.section {
+  padding: 60px 0 !important;
+  margin: 0 auto !important;
+}
+
+.hero-content-main {
+  text-align: center !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+}
+
+/* Ensure proper spacing */
+.status-badge-main,
+.hero-title-new,
+.hero-subtitle-new {
+  margin-bottom: 2rem !important;
+  text-align: center !important;
+}
+
+/* Grid and Flex Fixes */
+.features-grid-new {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 2rem !important;
+  margin: 0 auto !important;
+  text-align: left !important;
+}
+
+.hero-stats-new {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 2rem !important;
+  flex-wrap: wrap !important;
+  margin-top: 3rem !important;
 }
