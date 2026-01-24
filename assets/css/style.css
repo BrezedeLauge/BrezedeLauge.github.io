@@ -85,6 +85,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Main content areas need space for fixed header */
+main {
+  padding-top: 100px; /* Space for fixed header */
+}
+
 /* Aurora Background Animation */
 .aurora {
   position: fixed;
@@ -556,12 +561,13 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-top: 100px; /* Space for fixed header */
 }
 
 /* Hero Section - Completely Centered */
 .hero-main {
-  padding: 120px 0 100px;
-  min-height: 100vh;
+  padding: 40px 0 100px; /* Reduced top padding since main has padding-top */
+  min-height: calc(100vh - 100px); /* Account for header space */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -935,6 +941,15 @@ body {
     align-items: center;
     text-align: center;
   }
+  
+  /* Extra mobile padding for header overlap */
+  main {
+    padding-top: 140px !important;
+  }
+  
+  .main-centered {
+    padding-top: 140px !important;
+  }
 }
 
 /* Small Mobile Devices */
@@ -1001,6 +1016,16 @@ body {
   .sontheimer-logo {
     max-width: 100px;
     height: auto;
+  }
+  
+  /* Extra padding for mobile header */
+  .main-centered {
+    padding-top: 120px;
+  }
+  
+  .hero-main {
+    padding: 20px 0 60px;
+    min-height: calc(100vh - 120px);
   }
 }
 }
