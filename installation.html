@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation - LineIQ</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3h18v18H3V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="brand-name">LineIQ</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="installation.html" class="active">Installation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Installation & Setup</h1>
+            <p>LineIQ auf deinem System einrichten</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+
+            <div class="install-section">
+                <h2>📋 Voraussetzungen</h2>
+                <div class="requirements-grid">
+                    <div class="requirement-card">
+                        <h3>Backend</h3>
+                        <ul>
+                            <li>Python 3.8+</li>
+                            <li>pip (Python Package Manager)</li>
+                            <li>virtualenv (empfohlen)</li>
+                        </ul>
+                    </div>
+                    <div class="requirement-card">
+                        <h3>Frontend</h3>
+                        <ul>
+                            <li>Flutter SDK 3.0+</li>
+                            <li>Dart SDK</li>
+                            <li>Platform-spezifische Tools (siehe unten)</li>
+                        </ul>
+                    </div>
+                    <div class="requirement-card">
+                        <h3>Optional</h3>
+                        <ul>
+                            <li>Barcode-Scanner (Keyboard-Wedge)</li>
+                            <li>Raspberry Pi für GPIO</li>
+                            <li>Google Drive API Credentials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🐧 Linux Installation (Empfohlen)</h2>
+                <p>
+                    Die Linux-Installation ist am einfachsten und bietet vollständige Funktionalität inklusive 
+                    automatischem Start als systemd-Service.
+                </p>
+
+                <div class="install-step">
+                    <h3>1. Repository klonen</h3>
+                    <div class="code-block">
+                        <pre><code>git clone https://github.com/BrezedeLauge/lineiqnew.git
+cd lineiqnew</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>2. Automatische Installation</h3>
+                    <div class="code-block">
+                        <pre><code>cd install/linux
+chmod +x install.sh
+
+# Option 1: Komplette Installation (empfohlen)
+./install.sh --complete
+
+# Option 2: Nur Backend
+./install.sh
+
+# Option 3: Backend + Frontend
+./install.sh --frontend
+
+# Option 4: Alles + Scanner Service
+./install.sh --with-start-all --complete</code></pre>
+                    </div>
+                    <div class="info-box">
+                        <strong>Was macht das Installations-Skript?</strong>
+                        <ul>
+                            <li>Installiert System-Dependencies (clang, cmake, GTK3, etc.)</li>
+                            <li>Erstellt Python virtualenv und installiert Requirements</li>
+                            <li>Registriert systemd-Service für Backend (Port 9001)</li>
+                            <li>Baut Flutter-App und erstellt Desktop-Launcher (--frontend)</li>
+                            <li>Erstellt Autostart-Eintrag und Desktop-Shortcut (--complete)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>3. Service verwalten</h3>
+                    <div class="code-block">
+                        <pre><code># Status prüfen
+sudo systemctl status lineiq-backend.service
+
+# Logs ansehen
+journalctl -u lineiq-backend.service -f
+
+# Service neu starten
+sudo systemctl restart lineiq-backend.service
+
+# Frontend starten
+lineiq-frontend
+# oder über Anwendungsmenü</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>4. GPIO Setup (Optional, für Raspberry Pi)</h3>
+                    <div class="code-block">
+                        <pre><code># Benutzer zu erforderlichen Gruppen hinzufügen
+sudo usermod -aG input $USER
+sudo usermod -aG gpio $USER
+
+# Abmelden und wieder anmelden erforderlich!
+
+# Scanner Service installieren
+./install.sh --with-scanner</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🪟 Windows Installation</h2>
+                
+                <div class="install-step">
+                    <h3>1. Python Backend einrichten</h3>
+                    <div class="code-block">
+                        <pre><code># PowerShell oder CMD
+git clone https://github.com/BrezedeLauge/lineiqnew.git
+cd lineiqnew
+
+# Virtualenv erstellen
+python -m venv .venv
+.venv\Scripts\activate
+
+# Dependencies installieren
+pip install -r backend\requirements.txt</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>2. Backend starten</h3>
+                    <div class="code-block">
+                        <pre><code>.venv\Scripts\activate
+python backend\start_all.py
+
+# Backend läuft auf http://localhost:9001</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>3. Flutter Frontend bauen</h3>
+                    <div class="code-block">
+                        <pre><code>cd frontend
+flutter pub get
+flutter build windows
+
+# App starten
+flutter run -d windows</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🍎 macOS Installation</h2>
+                
+                <div class="install-step">
+                    <h3>1. Dependencies installieren</h3>
+                    <div class="code-block">
+                        <pre><code># Homebrew installieren (falls nicht vorhanden)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Python 3 installieren
+brew install python@3.11
+
+# Flutter installieren
+brew install --cask flutter</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>2. Repository klonen und Backend starten</h3>
+                    <div class="code-block">
+                        <pre><code>git clone https://github.com/BrezedeLauge/lineiqnew.git
+cd lineiqnew
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+
+python3 backend/start_all.py</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>3. Flutter App bauen</h3>
+                    <div class="code-block">
+                        <pre><code>cd frontend
+flutter pub get
+flutter build macos
+
+# App starten
+open build/macos/Build/Products/Release/lineiq.app</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>📱 Mobile Installation (Android/iOS)</h2>
+                
+                <div class="install-step">
+                    <h3>Android</h3>
+                    <div class="code-block">
+                        <pre><code>cd frontend
+
+# Debug APK bauen
+flutter build apk
+
+# Release APK bauen
+flutter build apk --release
+
+# APK installieren
+flutter install
+
+# App liegt in: build/app/outputs/flutter-apk/app-release.apk</code></pre>
+                    </div>
+                    <div class="info-box">
+                        <strong>Hinweis:</strong> Backend muss auf einem erreichbaren Server laufen. 
+                        Passe die Backend-URL in <code>frontend/lib/services/local_backend.dart</code> an.
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>iOS</h3>
+                    <div class="code-block">
+                        <pre><code>cd frontend
+
+# Xcode öffnen
+open ios/Runner.xcworkspace
+
+# In Xcode:
+# - Signing & Capabilities konfigurieren
+# - Developer Account hinzufügen
+# - Build und Deploy auf Device/Simulator</code></pre>
+                    </div>
+                    <div class="info-box">
+                        <strong>Voraussetzungen:</strong>
+                        <ul>
+                            <li>macOS mit Xcode</li>
+                            <li>Apple Developer Account</li>
+                            <li>iOS Device oder Simulator</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🔧 Manuelle Installation</h2>
+                
+                <div class="install-step">
+                    <h3>Backend manuell einrichten</h3>
+                    <div class="code-block">
+                        <pre><code># 1. Virtual Environment erstellen
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# oder
+.venv\Scripts\activate     # Windows
+
+# 2. Dependencies installieren
+pip install fastapi uvicorn pydantic
+
+# 3. Backend starten
+uvicorn backend.server:app --host 0.0.0.0 --port 9001 --reload
+
+# 4. In separatem Terminal: Scanner starten (optional)
+cd backend/scanner
+python3 barcode_scanner.py</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>Frontend manuell bauen</h3>
+                    <div class="code-block">
+                        <pre><code>cd frontend
+
+# Dependencies installieren
+flutter pub get
+
+# Für Linux
+flutter build linux
+./build/linux/x64/release/bundle/lineiq
+
+# Für Windows
+flutter build windows
+.\build\windows\runner\Release\lineiq.exe
+
+# Für macOS
+flutter build macos
+open build/macos/Build/Products/Release/lineiq.app</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🔍 Barcode-Scanner Setup</h2>
+                <div class="code-block">
+                    <pre><code># Scanner starten
+cd backend/scanner
+./start_barcode_scanner.sh
+
+# Oder direkt
+python3 barcode_scanner.py
+
+# Befehle im Scanner
+s oder status  - Zeigt aktuellen Status
+q oder quit    - Beendet den Scanner</code></pre>
+                </div>
+                <div class="info-box">
+                    <strong>Scanner-Workflow:</strong>
+                    <ol>
+                        <li><strong>Erster Scan:</strong> Setzt Auftragsnummer</li>
+                        <li><strong>Zweiter Scan:</strong> Setzt Artikel</li>
+                        <li><strong>Dritter Scan:</strong>
+                            <ul>
+                                <li>Gleicher Code wie Auftrag → Reset</li>
+                                <li>Neuer Code → Neuer Auftrag</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>☁️ Google Drive Sync (Optional)</h2>
+                
+                <div class="install-step">
+                    <h3>1. Service Account erstellen</h3>
+                    <p>
+                        Erstelle einen Service Account in der Google Cloud Console und lade die Credentials-JSON herunter.
+                    </p>
+                </div>
+
+                <div class="install-step">
+                    <h3>2. Konfiguration anpassen</h3>
+                    <div class="code-block">
+                        <pre><code># In backend/data/save_data.py
+
+ENABLE_GDRIVE_SYNC = True
+GDRIVE_CREDENTIALS = "/opt/lineiq/credentials/gdrive.json"
+GDRIVE_SHARED_DRIVE_ID = "your-drive-id-here"
+GDRIVE_SYNC_INTERVAL = 5.0  # Sekunden</code></pre>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <h3>3. Dependencies installieren</h3>
+                    <div class="code-block">
+                        <pre><code>pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>🗑️ Deinstallation</h2>
+                <div class="code-block">
+                    <pre><code># Services stoppen und entfernen
+sudo systemctl disable --now lineiq-backend.service
+sudo rm -f /etc/systemd/system/lineiq-backend.service
+sudo systemctl daemon-reload
+
+# Frontend entfernen (optional)
+sudo rm -rf /opt/lineiq/frontend
+sudo rm -f /usr/local/bin/lineiq-frontend
+sudo rm -f /usr/share/applications/lineiq-frontend.desktop
+sudo rm -f /usr/share/pixmaps/lineiq.png
+
+# Autostart und Desktop-Shortcut entfernen
+rm -f ~/.config/autostart/lineiq-frontend.desktop
+rm -f ~/Desktop/LineIQ.desktop
+
+# Repository löschen
+cd ..
+rm -rf lineiqnew</code></pre>
+                </div>
+            </div>
+
+            <div class="install-section">
+                <h2>❓ Troubleshooting</h2>
+                
+                <div class="troubleshooting-item">
+                    <h3>Backend startet nicht</h3>
+                    <div class="code-block">
+                        <pre><code># Logs prüfen
+journalctl -u lineiq-backend.service -n 50
+
+# Manuell starten zum Debuggen
+source .venv/bin/activate
+python3 backend/start_all.py
+
+# Port prüfen
+sudo lsof -i :9001</code></pre>
+                    </div>
+                </div>
+
+                <div class="troubleshooting-item">
+                    <h3>Flutter Build schlägt fehl</h3>
+                    <div class="code-block">
+                        <pre><code># Flutter Doctor ausführen
+flutter doctor -v
+
+# Cache leeren
+flutter clean
+flutter pub get
+
+# Dependencies neu installieren
+rm -rf build
+flutter build linux --verbose</code></pre>
+                    </div>
+                </div>
+
+                <div class="troubleshooting-item">
+                    <h3>Scanner erkennt keine Eingaben</h3>
+                    <ul>
+                        <li>Prüfe ob Scanner im Keyboard-Wedge-Modus ist</li>
+                        <li>Teste Scanner in einem Texteditor</li>
+                        <li>Prüfe Berechtigungen: <code>ls -la backend/data/state.json</code></li>
+                        <li>Scanner-Logs prüfen</li>
+                    </ul>
+                </div>
+
+                <div class="troubleshooting-item">
+                    <h3>GPIO funktioniert nicht</h3>
+                    <div class="code-block">
+                        <pre><code># Gruppen-Mitgliedschaft prüfen
+groups
+
+# Sollte 'input' und 'gpio' enthalten
+# Falls nicht:
+sudo usermod -aG input,gpio $USER
+
+# Abmelden und wieder anmelden!
+
+# GPIO-Zugriff testen
+gpio readall  # auf Raspberry Pi</code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="cta-section-full">
+        <div class="container">
+            <h2>Brauchst du Hilfe?</h2>
+            <p>Bei Fragen oder Problemen öffne ein Issue auf GitHub.</p>
+            <a href="https://github.com/BrezedeLauge/lineiqnew/issues" class="btn btn-primary" target="_blank">Issue erstellen</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 LineIQ. Open Source Projekt.</p>
+            <p>
+                <a href="https://github.com/BrezedeLauge/lineiqnew" target="_blank">GitHub Repository</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
