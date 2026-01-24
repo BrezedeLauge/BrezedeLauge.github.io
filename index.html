@@ -297,11 +297,13 @@
       const hideBanner = () => {
         cookieBanner.setAttribute('hidden', '');
         cookieBanner.style.display = 'none';
+        cookieBanner.setAttribute('aria-hidden', 'true');
       };
 
       const showBanner = () => {
         cookieBanner.removeAttribute('hidden');
         cookieBanner.style.display = 'flex';
+        cookieBanner.setAttribute('aria-hidden', 'false');
       };
 
       const hasConsent = () => {
@@ -316,10 +318,13 @@
           localStorage.setItem(cookieKey, '1');
         } catch (e) { /* ignore */ }
         const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-        document.cookie = `${cookieKey}=1; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax${secure}`;
+        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString();
+        document.cookie = `${cookieKey}=1; expires=${expires}; path=/; SameSite=Lax${secure}`;
       };
 
-      if (!hasConsent()) {
+      if (hasConsent()) {
+        hideBanner();
+      } else {
         showBanner();
       }
 
