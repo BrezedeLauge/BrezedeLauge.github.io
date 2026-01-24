@@ -23,6 +23,7 @@ class LiquidAurora {
     this.animationId = null;
     this.reducedMotion = false;
     this.isInitialized = false;
+    this.forceStatic = false;
 
     // Uniform, consistent behavior tuning (same for every element)
     this.behavior = {
@@ -55,10 +56,13 @@ class LiquidAurora {
 
   init() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches || /Mobi|Android/i.test(navigator.userAgent || '');
-    if (isMobile) this.applyMobileTuning();
+    if (isMobile) {
+      this.applyMobileTuning();
+      this.forceStatic = true; // prefer static fallback on phones for speed
+    }
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (this.reducedMotion) {
+    if (this.reducedMotion || this.forceStatic) {
       this.ensureGlassLayer();
       this.initStaticFallback();
       return;

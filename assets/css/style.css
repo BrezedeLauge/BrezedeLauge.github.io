@@ -257,19 +257,19 @@ main {
 
 @media (max-width: 768px) {
   #aurora-glass {
-    backdrop-filter: blur(18px) saturate(120%);
-    -webkit-backdrop-filter: blur(18px) saturate(120%);
-    opacity: 0.75;
+    backdrop-filter: blur(12px) saturate(115%);
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    opacity: 0.6;
   }
 
   @supports not (backdrop-filter: blur(1px)) {
     #aurora-glass {
-      filter: blur(18px);
+      filter: blur(12px);
     }
   }
 
   #liquid-aurora {
-    opacity: 0.3;
+    opacity: 0.22;
   }
 }
 
