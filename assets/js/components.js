@@ -103,11 +103,20 @@ class WebsiteComponents {
 
 // Auto-load when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('LineIQ Template System loading...');
+  
+  // Debug: Check if containers exist
+  const headerContainer = document.getElementById('header');
+  const footerContainer = document.getElementById('footer');
+  
+  console.log('Header container found:', !!headerContainer);
+  console.log('Footer container found:', !!footerContainer);
+  
   // Detect current page from URL
   const path = window.location.pathname;
   let currentPage = '';
   
-  if (path.includes('index.html') || path === '/') {
+  if (path.includes('index.html') || path === '/' || path === '') {
     currentPage = 'index';
   } else if (path.includes('project.html')) {
     currentPage = 'project';
@@ -117,5 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
     currentPage = 'datenschutz';
   }
 
+  console.log('Detected page:', currentPage);
+  
   WebsiteComponents.loadComponents(currentPage);
+  
+  console.log('LineIQ Template System loaded successfully!');
 });

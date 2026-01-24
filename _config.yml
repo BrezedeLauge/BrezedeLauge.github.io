@@ -1,0 +1,45 @@
+name: LineIQ Website
+description: Moderne Dashboard-Lösung für Industrieanwendungen
+url: ""
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude from processing
+exclude:
+  - README.md
+  - LICENSE
+  - .github/
+
+# Collections
+collections:
+  includes:
+    output: false
+
+# Default layout
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Site settings
+title: "LineIQ Dashboard"
+email: "info@lineiq.de"
+author: "LineIQ Team"
+
+# SEO
+lang: de
+timezone: Europe/Berlin
+
+# GitHub Pages settings
+safe: true
+incremental: false
+highlighter: none
+gist:
+  noscript: false

@@ -8,7 +8,6 @@
   <meta name="keywords" content="Dashboard, Flutter, FastAPI, IoT, Industrie 4.0, Fertigung, Sontheimer, LineIQ" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/browser-compatibility.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,8 +16,37 @@
 </head>
 
 <body>
-  <div id="header"></div>
+  <div class="aurora"></div>
   
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Zur Startseite">
+        <div class="brand-logo">
+          <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
+          <div class="powered-by">
+            <span class="powered-text">powered by</span>
+            <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
+          </div>
+        </div>
+      </a>
+
+      <nav class="nav" role="navigation" aria-label="Hauptnavigation">
+        <a class="nav-link active" href="index.html" aria-current="page">
+          <span class="nav-indicator"></span>
+          Start
+        </a>
+        <a class="nav-link" href="project.html">
+          <span class="nav-indicator"></span>
+          Projekt
+        </a>
+        <a class="nav-link" href="index.html#contact">
+          <span class="nav-indicator"></span>
+          Kontakt
+        </a>
+      </nav>
+    </div>
+  </header>
+
   <main class="main-centered">
     <!-- Hero Section -->
     <section class="hero-main">
