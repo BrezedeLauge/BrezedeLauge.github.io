@@ -1,0 +1,96 @@
+/* Opera GX and Chromium Browser Compatibility Fix */
+
+/* Add webkit prefixes for all backdrop-filter usage */
+.glass,
+.nav-link,
+.btn,
+.feature-card,
+.stat-card,
+.contact-card,
+.project-card,
+.hero-badge,
+.status-badge,
+.legal-card,
+.highlight-box,
+[class*="backdrop-filter"],
+[class*="glass"] {
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+/* Ensure font loading works in Opera GX */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .nav-link,
+  .btn,
+  .feature-card,
+  .stat-card,
+  .contact-card,
+  .project-card,
+  .hero-badge,
+  .status-badge,
+  .legal-card,
+  .highlight-box {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+}
+
+/* Fix gradient text rendering in Opera */
+.hero-title,
+.hero-title-new,
+.project-title,
+.section-title,
+[class*="gradient-text"] {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Fix flexbox issues in Opera GX */
+.nav,
+.footer-links,
+.hero-stats,
+.hero-stats-new,
+.about-highlights,
+.about-highlights-new,
+.contact-grid,
+.contact-grid-new {
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
+}
+
+/* Fix grid layout issues */
+.features-grid,
+.features-grid-new,
+.project-grid {
+  display: -ms-grid !important;
+  display: grid !important;
+}
+
+/* Force hardware acceleration for smoother animations */
+.aurora,
+.nav-link,
+.btn,
+.card,
+[class*="card"],
+[class*="hero"] {
+  -webkit-transform: translateZ(0) !important;
+  transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+/* Fix clamp() function fallbacks for older browsers */
+@supports not (font-size: clamp(16px, 4vw, 18px)) {
+  .hero-title-new {
+    font-size: 48px !important;
+  }
+  .hero-subtitle-new {
+    font-size: 20px !important;
+  }
+  .section-title-new {
+    font-size: 36px !important;
+  }
+}

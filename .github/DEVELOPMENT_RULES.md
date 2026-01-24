@@ -117,8 +117,9 @@ backdrop-filter: blur(var(--blur-md));
 1. **Favicon**: `<link rel="icon" type="image/png" href="assets/pictures/lineiqsymbol.png">`
 2. **Apple Touch Icon**: `<link rel="apple-touch-icon" href="assets/pictures/lineiqsymbol.png">`
 3. **Meta Viewport**: `<meta name="viewport" content="width=device-width, initial-scale=1" />`
-4. **Aurora Background**: `<div class="aurora"></div>`
-5. **Smooth Scrolling Script**: JavaScript für Anker-Links
+4. **CSS Files**: Main Style + Browser Compatibility CSS
+5. **Template System**: `<script src="assets/js/components.js"></script>`
+6. **Aurora Background**: Wird automatisch über Template-System geladen
 
 ### Footer (Standard):
 ```html
