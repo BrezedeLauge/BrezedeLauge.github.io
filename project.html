@@ -3,91 +3,284 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LineIQ — Projekt</title>
-  <meta name="description" content="Projektübersicht: Architektur, Ziele, Komponenten." />
+  <title>LineIQ — Technische Details</title>
+  <meta name="description" content="Detaillierte Projektübersicht: Architektur, Technologien und Implementierung des LineIQ Dashboard-Systems." />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/pictures/lineiqsymbol.png">
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Zur Startseite">
-        <span class="brand-dot" aria-hidden="true"></span>
-        <span class="brand-text">LineIQ</span>
-      </a>
-
-      <nav class="nav">
-        <a class="nav-link" href="index.html">Start</a>
-        <a class="nav-link active" href="project.html">Projekt</a>
-        <a class="nav-link" href="contact.html">Kontakt</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="page-head">
-      <h1>Projekt</h1>
-      <p class="lead">
-        Überblick über Ziel, Architektur und Erweiterungsmöglichkeiten.
-      </p>
-    </section>
-
-    <section class="cards">
-      <article class="card">
-        <h2>Ziel</h2>
-        <p>
-          LineIQ erfasst Produktions-, Fehler- und Nacharbeitszahlen, speichert Auftragsdaten strukturiert
-          und stellt einen Fullscreen-Dashboard-Client bereit.
-        </p>
-      </article>
-
-      <article class="card">
-        <h2>Komponenten</h2>
-        <ul class="list">
-          <li><span class="dot"></span> Flutter Desktop Dashboard</li>
-          <li><span class="dot"></span> FastAPI Backend (REST)</li>
-          <li><span class="dot"></span> Dienste: Scanner, GPIO, Systemstatus</li>
-          <li><span class="dot"></span> Filesystem-Struktur (Year/Month/Day)</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2>Architektur (High-Level)</h2>
-        <div class="codebox" role="img" aria-label="Architekturdiagramm als Text">
-<pre>
-[Flutter Dashboard]
-      |
-      |  REST / WebSocket (optional)
-      v
-[FastAPI Server] --- [Scanner Service]
-      |
-      +--- [GPIO / Hardware Service]
-      |
-      +--- [Filesystem Storage]
-</pre>
+  <div id="header"></div>
+  
+  <main>
+    <!-- Project Hero -->
+    <section class="project-hero">
+      <div class="container">
+        <div class="project-header">
+          <div class="breadcrumb">
+            <a href="index.html">LineIQ</a>
+            <span>/</span>
+            <span>Technische Details</span>
+          </div>
+          
+          <h1 class="project-title">
+            Moderne Dashboard-<br>
+            <span class="gradient-text">Architektur</span>
+          </h1>
+          
+          <p class="project-subtitle">
+            Detaillierte Übersicht über die Technologien, Architektur und 
+            Implementierung des LineIQ Produktions-Dashboard Systems.
+          </p>
         </div>
-      </article>
+      </div>
     </section>
 
-    <section class="card accent">
-      <h2>Nächste Schritte</h2>
-      <p class="muted">
-        Typische Erweiterungen: Live-Statistiken, Benutzerrollen, Export (CSV/PDF), Health-Checks,
-        lokales Caching, Offline-Modus.
-      </p>
-      <a class="btn primary" href="contact.html">Kontakt aufnehmen</a>
+    <!-- Architecture Overview -->
+    <section class="architecture">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">System-Architektur</h2>
+          <p class="section-subtitle">Moderne 3-Tier Architektur für maximale Skalierbarkeit</p>
+        </div>
+        
+        <div class="arch-grid">
+          <div class="arch-card frontend">
+            <div class="arch-icon">
+              <div class="icon-flutter"></div>
+            </div>
+            <h3>Flutter Frontend</h3>
+            <ul class="arch-features">
+              <li>Cross-Platform Desktop App</li>
+              <li>Fullscreen Dashboard Interface</li>
+              <li>Echtzeit Datenvisualisierung</li>
+              <li>Touch-optimierte Bedienung</li>
+              <li>Material Design 3</li>
+            </ul>
+            <div class="tech-stack">
+              <span class="tech">Flutter 3.x</span>
+              <span class="tech">Dart</span>
+              <span class="tech">Material 3</span>
+            </div>
+          </div>
+          
+          <div class="arch-card backend">
+            <div class="arch-icon">
+              <div class="icon-api"></div>
+            </div>
+            <h3>FastAPI Backend</h3>
+            <ul class="arch-features">
+              <li>REST API mit OpenAPI Docs</li>
+              <li>WebSocket Real-time Updates</li>
+              <li>Asynchrone Datenverarbeitung</li>
+              <li>Automatische Validierung</li>
+              <li>Strukturierte Datenspeicherung</li>
+            </ul>
+            <div class="tech-stack">
+              <span class="tech">FastAPI</span>
+              <span class="tech">Python 3.11+</span>
+              <span class="tech">Pydantic</span>
+            </div>
+          </div>
+          
+          <div class="arch-card hardware">
+            <div class="arch-icon">
+              <div class="icon-iot"></div>
+            </div>
+            <h3>IoT Hardware Layer</h3>
+            <ul class="arch-features">
+              <li>Raspberry Pi 4 Gateway</li>
+              <li>GPIO Sensor Integration</li>
+              <li>Barcode Scanner Support</li>
+              <li>Industrielle Robustheit</li>
+              <li>Edge Computing Capabilities</li>
+            </ul>
+            <div class="tech-stack">
+              <span class="tech">Raspberry Pi</span>
+              <span class="tech">GPIO</span>
+              <span class="tech">USB Devices</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Deep Dive -->
+    <section class="features-detail">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Kernfunktionalitäten</h2>
+          <p class="section-subtitle">Entwickelt für industrielle Produktionsumgebungen</p>
+        </div>
+        
+        <div class="features-list">
+          <div class="feature-detail">
+            <div class="feature-number">01</div>
+            <div class="feature-content">
+              <h3>Produktionsdatenerfassung</h3>
+              <p>Erfassung und Speicherung von Produktionszahlen, Fehlermeldungen und Nacharbeitsstatistiken in Echtzeit mit strukturierter Dateienorganisation nach Jahr/Monat/Tag.</p>
+              <div class="feature-tags">
+                <span class="tag">Real-time</span>
+                <span class="tag">Structured Data</span>
+                <span class="tag">JSON Storage</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="feature-detail">
+            <div class="feature-number">02</div>
+            <div class="feature-content">
+              <h3>Dashboard-Interface</h3>
+              <p>Vollbild Flutter-Dashboard mit animierten Charts, KPI-Anzeigen und Touch-optimierter Bedienung für industrielle Tablet-Computer und große Monitore.</p>
+              <div class="feature-tags">
+                <span class="tag">Fullscreen</span>
+                <span class="tag">Touch UI</span>
+                <span class="tag">Charts</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="feature-detail">
+            <div class="feature-number">03</div>
+            <div class="feature-content">
+              <h3>Hardware-Integration</h3>
+              <p>Direkte Anbindung von Barcode-Scannern über USB und GPIO-basierte Sensorik für automatische Datenerfassung ohne manuelle Eingaben.</p>
+              <div class="feature-tags">
+                <span class="tag">GPIO</span>
+                <span class="tag">USB</span>
+                <span class="tag">Automation</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="feature-detail">
+            <div class="feature-number">04</div>
+            <div class="feature-content">
+              <h3>API-Dokumentation</h3>
+              <p>Vollständig dokumentierte REST-API mit automatisch generierter OpenAPI-Spezifikation und interaktiver Swagger-UI für einfache Integration.</p>
+              <div class="feature-tags">
+                <span class="tag">OpenAPI</span>
+                <span class="tag">Swagger</span>
+                <span class="tag">REST</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Specs -->
+    <section class="tech-specs">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Technische Spezifikationen</h2>
+          <p class="section-subtitle">Detaillierte System-Requirements und Implementierungsdetails</p>
+        </div>
+        
+        <div class="specs-grid">
+          <div class="spec-category">
+            <h3>Frontend Requirements</h3>
+            <div class="spec-list">
+              <div class="spec-item">
+                <span class="spec-label">Platform</span>
+                <span class="spec-value">Windows, Linux, macOS</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Flutter Version</span>
+                <span class="spec-value">3.16.0+</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Resolution</span>
+                <span class="spec-value">1920x1080 (empfohlen)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Touch Support</span>
+                <span class="spec-value">Optional</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="spec-category">
+            <h3>Backend Requirements</h3>
+            <div class="spec-list">
+              <div class="spec-item">
+                <span class="spec-label">Python Version</span>
+                <span class="spec-value">3.11+</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">FastAPI</span>
+                <span class="spec-value">0.104.0+</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Memory</span>
+                <span class="spec-value">512MB RAM</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Storage</span>
+                <span class="spec-value">1GB+ verfügbar</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="spec-category">
+            <h3>Hardware Requirements</h3>
+            <div class="spec-list">
+              <div class="spec-item">
+                <span class="spec-label">Raspberry Pi</span>
+                <span class="spec-value">Pi 4 (4GB RAM)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Scanner</span>
+                <span class="spec-value">USB HID Barcode</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">GPIO</span>
+                <span class="spec-value">Digital I/O Pins</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Network</span>
+                <span class="spec-value">Ethernet/WiFi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span>© <span id="year"></span> LineIQ</span>
-      <span class="muted">Version: v1</span>
-    </div>
-  </footer>
+  <div id="footer"></div>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // Smooth scrolling für Anker-Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Aurora animation
+    const aurora = document.querySelector('.aurora');
+    let mouseX = 0, mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX / window.innerWidth;
+      mouseY = e.clientY / window.innerHeight;
+      
+      aurora.style.background = `
+        radial-gradient(800px 400px at ${20 + mouseX * 60}% ${-10 + mouseY * 20}%, rgba(124,92,255,0.4), transparent 50%),
+        radial-gradient(600px 300px at ${80 + mouseX * 20}% ${10 + mouseY * 80}%, rgba(53,208,255,0.3), transparent 50%)
+      `;
+    });
   </script>
+  
+  <script src="assets/js/components.js"></script>
 </body>
 </html>

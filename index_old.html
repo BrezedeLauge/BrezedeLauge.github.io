@@ -16,29 +16,58 @@
 </head>
 
 <body>
-  <div id="header"></div>
+  <div class="aurora"></div>
   
-  <main class="main-centered">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Zur Startseite">
+        <div class="brand-logo">
+          <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
+          <div class="powered-by">
+            <span class="powered-text">Powered by</span>
+            <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
+          </div>
+        </div>
+      </a>
+
+      <nav class="nav" role="navigation" aria-label="Hauptnavigation">
+        <a class="nav-link active" href="index.html" aria-current="page">
+          <span class="nav-indicator"></span>
+          Start
+        </a>
+        <a class="nav-link" href="project.html">
+          <span class="nav-indicator"></span>
+          Projekt
+        </a>
+        <a class="nav-link" href="#contact">
+          <span class="nav-indicator"></span>
+          Kontakt
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
     <!-- Hero Section -->
-    <section class="hero-main">
+    <section class="hero">
       <div class="container">
-        <div class="hero-content-main">
-          <div class="status-badge-main">
+        <div class="hero-content-center">
+          <div class="status-badge">
             <div class="status-dot"></div>
             <span>System Online</span>
           </div>
           
-          <h1 class="hero-title-new">
-            <span class="gradient-text">LineIQ</span>
-            <span class="hero-subtitle-new">Dashboard-System</span>
+          <h1 class="hero-title-center">
+            <span class="gradient-text">LineIQ</span><br>
+            <span class="hero-subtitle-main">Dashboard-System</span>
           </h1>
           
-          <p class="hero-description-new">
+          <p class="hero-description">
             Moderne Überwachung und Steuerung von Fertigungsprozessen<br>
             mit Echtzeit-Analytics und intuitivem Flutter-Interface.
           </p>
 
-          <div class="hero-actions-main">
+          <div class="hero-actions-center">
             <a class="btn btn-primary" href="project.html">
               <span>Projekt erkunden</span>
               <svg width="16" height="16" viewBox="0 0 16 16">
@@ -49,33 +78,33 @@
               <span>Features ansehen</span>
             </a>
           </div>
+        </div>
+        
+        <div class="hero-stats-center">
+          <div class="stat-card">
+            <div class="stat-icon">📱</div>
+            <div class="stat-content">
+              <div class="stat-title">Frontend</div>
+              <div class="stat-value">Flutter</div>
+              <div class="stat-subtitle">Cross-Platform</div>
+            </div>
+          </div>
           
-          <div class="hero-stats-new">
-            <div class="stat-card-new">
-              <div class="stat-icon-new">📱</div>
-              <div class="stat-content-new">
-                <div class="stat-title-new">Frontend</div>
-                <div class="stat-value-new">Flutter</div>
-                <div class="stat-subtitle-new">Cross-Platform</div>
-              </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-content">
+              <div class="stat-title">Backend</div>
+              <div class="stat-value">FastAPI</div>
+              <div class="stat-subtitle">Python API</div>
             </div>
-            
-            <div class="stat-card-new">
-              <div class="stat-icon-new">⚡</div>
-              <div class="stat-content-new">
-                <div class="stat-title-new">Backend</div>
-                <div class="stat-value-new">FastAPI</div>
-                <div class="stat-subtitle-new">Python API</div>
-              </div>
-            </div>
-            
-            <div class="stat-card-new">
-              <div class="stat-icon-new">🔌</div>
-              <div class="stat-content-new">
-                <div class="stat-title-new">Integration</div>
-                <div class="stat-value-new">IoT</div>
-                <div class="stat-subtitle-new">Raspberry Pi</div>
-              </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon">🔌</div>
+            <div class="stat-content">
+              <div class="stat-title">Integration</div>
+              <div class="stat-value">IoT</div>
+              <div class="stat-subtitle">Raspberry Pi</div>
             </div>
           </div>
         </div>
@@ -83,48 +112,48 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="features-main">
+    <section id="features" class="features">
       <div class="container">
-        <div class="section-header-new">
-          <h2 class="section-title-new">Technologie-Stack</h2>
-          <p class="section-subtitle-new">
+        <div class="section-header-center">
+          <h2 class="section-title">Technologie-Stack</h2>
+          <p class="section-subtitle">
             Moderne Architektur für industrielle Anwendungen
           </p>
         </div>
         
-        <div class="features-grid-new">
-          <div class="feature-card-new">
-            <div class="feature-icon-new">📱</div>
+        <div class="features-grid-center">
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
             <h3>Flutter Frontend</h3>
             <p>Cross-platform Benutzeroberfläche mit nativer Performance für Web, Mobile und Desktop</p>
           </div>
           
-          <div class="feature-card-new">
-            <div class="feature-icon-new">⚡</div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
             <h3>FastAPI Backend</h3>
             <p>Hochperformante Python API mit automatischer Dokumentation und Typ-Validierung</p>
           </div>
           
-          <div class="feature-card-new">
-            <div class="feature-icon-new">🔄</div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
             <h3>Echtzeit-Updates</h3>
             <p>Live-Monitoring von Sensoren und Maschinen mit WebSocket-Verbindungen</p>
           </div>
           
-          <div class="feature-card-new">
-            <div class="feature-icon-new">📊</div>
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
             <h3>Analytics Dashboard</h3>
             <p>Interaktive Diagramme und KPIs für datengetriebene Entscheidungen</p>
           </div>
           
-          <div class="feature-card-new">
-            <div class="feature-icon-new">🔌</div>
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
             <h3>IoT Integration</h3>
             <p>Raspberry Pi GPIO-Steuerung und Barcode-Scanner für industrielle Prozesse</p>
           </div>
           
-          <div class="feature-card-new">
-            <div class="feature-icon-new">📁</div>
+          <div class="feature-card">
+            <div class="feature-icon">📁</div>
             <h3>Datenpersistierung</h3>
             <p>Strukturierte JSON-Speicherung mit Backup und Versionierung</p>
           </div>
@@ -133,31 +162,31 @@
     </section>
 
     <!-- About Section -->
-    <section class="about-main">
+    <section class="about">
       <div class="container">
-        <div class="about-content-new">
-          <h2 class="about-title-new">Über das Projekt</h2>
-          <p class="about-description-new">
+        <div class="about-content-center">
+          <h2 class="about-title">Über das Projekt</h2>
+          <p class="about-description">
             LineIQ ist ein innovatives Schulprojekt, das moderne Webtechnologien 
             mit industrieller IoT-Integration verbindet. Es demonstriert die praktische 
             Anwendung von Flutter und FastAPI in einem realen Industriekontext.
           </p>
           
-          <div class="about-highlights-new">
-            <div class="highlight-item-new">
-              <div class="highlight-icon-new">🎓</div>
+          <div class="about-highlights">
+            <div class="highlight-item">
+              <div class="highlight-icon">🎓</div>
               <h3>Schulprojekt</h3>
               <p>Bildungskonzept für moderne Technologien</p>
             </div>
             
-            <div class="highlight-item-new">
-              <div class="highlight-icon-new">🏭</div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🏭</div>
               <h3>Industriell</h3>
               <p>Powered by Sontheimer Werkzeugmaschinen</p>
             </div>
             
-            <div class="highlight-item-new">
-              <div class="highlight-icon-new">🔓</div>
+            <div class="highlight-item">
+              <div class="highlight-icon">🔓</div>
               <h3>Open Source</h3>
               <p>Transparenter Code auf GitHub</p>
             </div>
@@ -167,31 +196,31 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact-main">
+    <section id="contact" class="contact">
       <div class="container">
-        <div class="contact-content-new">
-          <h2 class="contact-title-new">Kontakt & Links</h2>
-          <p class="contact-description-new">
+        <div class="contact-content-center">
+          <h2 class="contact-title">Kontakt & Links</h2>
+          <p class="contact-description">
             Haben Sie Fragen zum Projekt oder möchten Sie mehr erfahren?
           </p>
           
-          <div class="contact-grid-new">
-            <div class="contact-card-new">
-              <div class="contact-icon-new">📧</div>
+          <div class="contact-grid">
+            <div class="contact-card">
+              <div class="contact-icon">📧</div>
               <h3>E-Mail</h3>
-              <p><a href="mailto:info@lineiq.de" class="contact-link-new">info@lineiq.de</a></p>
+              <p><a href="mailto:info@lineiq.de" class="contact-link">info@lineiq.de</a></p>
             </div>
             
-            <div class="contact-card-new">
-              <div class="contact-icon-new">📚</div>
-              <h3>Dokumentation</h3>
-              <p><a href="project.html" class="contact-link-new">Projektstatus ansehen</a></p>
+            <div class="contact-card">
+              <div class="contact-icon">🔗</div>
+              <h3>GitHub</h3>
+              <p><a href="https://github.com/BrezedeLauge/lineiqnew" target="_blank" rel="noopener" class="contact-link">Quellcode ansehen</a></p>
             </div>
             
-            <div class="contact-card-new">
-              <div class="contact-icon-new">📋</div>
+            <div class="contact-card">
+              <div class="contact-icon">📋</div>
               <h3>Projekt</h3>
-              <p><a href="project.html" class="contact-link-new">Technische Details</a></p>
+              <p><a href="project.html" class="contact-link">Technische Details</a></p>
             </div>
           </div>
         </div>
@@ -216,6 +245,7 @@
           <a href="index.html" aria-current="page">Start</a>
           <a href="project.html">Projekt</a>
           <a href="#contact">Kontakt</a>
+          <a href="https://github.com/BrezedeLauge/lineiqnew" target="_blank" rel="noopener">GitHub</a>
           <a href="impressum.html">Impressum</a>
           <a href="datenschutz.html">Datenschutz</a>
         </div>
@@ -263,7 +293,5 @@
       document.body.classList.remove('keyboard-navigation');
     });
   </script>
-  
-  <script src="assets/js/components.js"></script>
 </body>
 </html>

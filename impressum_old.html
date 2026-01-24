@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impressum – LineIQ</title>
+  <meta name="description" content="Impressum der Website LineIQ" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-dot"></span>
+        <span class="brand-text">LineIQ</span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav-link" href="index.html">Start</a>
+        <a class="nav-link" href="project.html">Projekt</a>
+        <a class="nav-link" href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="container">
+    <section class="page-head">
+      <h1>Impressum</h1>
+      <p class="lead">
+        Angaben gemäß § 18 Abs. 2 Medienstaatsvertrag (MStV)
+      </p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <h2>Projektstatus</h2>
+        <p>
+          Diese Website ist ein <strong>nicht-kommerzielles Schulprojekt</strong> und dient
+          ausschließlich schulischen, informativen und demonstrativen Zwecken.
+          Es besteht <strong>keine Gewinnerzielungsabsicht</strong>.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Verantwortlich für den Inhalt</h2>
+        <p>
+          Luis Kosok<br>
+          Heuweg 28c<br>
+          91560 Heilsbornn<br>
+          Deutschland
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Kontakt</h2>
+        <p>
+          E-Mail:
+          <a class="link" href="mailto:info@lineiq.de">
+            info@lineiq.de
+          </a>
+        </p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Haftung für Inhalte</h2>
+      <p class="muted">
+        Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten
+        nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich jedoch nicht
+        verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder
+        nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Haftung für externe Links</h2>
+      <p class="muted">
+        Diese Website enthält ggf. Links zu externen Websites Dritter, auf deren Inhalte kein
+        Einfluss besteht. Für diese fremden Inhalte wird daher keine Gewähr übernommen.
+        Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber
+        der Seiten verantwortlich.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> LineIQ</span>
+      <span class="muted">
+        <a class="link" href="impressum.html">Impressum</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
