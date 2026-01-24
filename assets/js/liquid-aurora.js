@@ -24,6 +24,7 @@ class LiquidAurora {
     this.reducedMotion = false;
     this.isInitialized = false;
     this.forceStatic = false;
+    this.disableAurora = false;
 
     // Uniform, consistent behavior tuning (same for every element)
     this.behavior = {
@@ -59,9 +60,20 @@ class LiquidAurora {
     if (isMobile) {
       this.applyMobileTuning();
       this.forceStatic = true; // prefer static fallback on phones for speed
+      this.disableAurora = true; // hard-disable aurora on phones to avoid load time
     }
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.disableAurora) {
+      const canvas = document.getElementById('liquid-aurora');
+      if (canvas) canvas.style.display = 'none';
+      const aurora = document.querySelector('.aurora');
+      if (aurora) aurora.style.display = 'none';
+      const glass = document.getElementById('aurora-glass');
+      if (glass) glass.style.display = 'none';
+      return;
+    }
+
     if (this.reducedMotion || this.forceStatic) {
       this.ensureGlassLayer();
       this.initStaticFallback();

@@ -225,7 +225,7 @@
 
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie Hinweis" hidden>
     <div class="cookie-text">
-      Diese Seite wird auf GitHub Pages gehostet. Technisch notwendige Cookies können von GitHub gesetzt werden. Wir setzen ein notwendiges Consent-Cookie/LocalStorage, um deine Auswahl zu merken. Mit "Akzeptieren" stimmst du zu.
+      Diese Seite wird auf GitHub Pages gehostet. Technisch notwendige Cookies können von GitHub gesetzt werden. Wir setzen ein notwendiges Consent-Cookie/LocalStorage (Speicherdauer 1 Stunde), um deine Auswahl zu merken. Mit "Akzeptieren" stimmst du zu.
     </div>
     <div class="cookie-actions">
       <a class="cookie-btn ghost" href="datenschutz.html">Mehr erfahren</a>
@@ -291,6 +291,8 @@
       const cookieBanner = document.getElementById('cookie-banner');
       const cookieAccept = document.getElementById('cookie-accept');
       const cookieKey = 'lineiq-cookie-consent';
+      const cookieTsKey = 'lineiq-cookie-consent-ts';
+      const ttlMs = 1000 * 60 * 60; // 1 Stunde
 
       if (!cookieBanner || !cookieAccept) return;
 
@@ -308,17 +310,21 @@
 
       const hasConsent = () => {
         try {
-          if (localStorage.getItem(cookieKey) === '1') return true;
+          const stored = localStorage.getItem(cookieKey);
+          const ts = Number(localStorage.getItem(cookieTsKey));
+          if (stored === '1' && ts && Date.now() < ts) return true;
         } catch (e) { /* ignore */ }
-        return document.cookie.split(';').some(c => c.trim() === `${cookieKey}=1`);
+        const cookieOk = document.cookie.split(';').some(c => c.trim() === `${cookieKey}=1`);
+        return cookieOk;
       };
 
       const setConsent = () => {
         try {
-          localStorage.setItem(cookieKey, '1');
+            localStorage.setItem(cookieKey, '1');
+            localStorage.setItem(cookieTsKey, String(Date.now() + ttlMs));
         } catch (e) { /* ignore */ }
         const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString();
+        const expires = new Date(Date.now() + ttlMs).toUTCString();
         document.cookie = `${cookieKey}=1; expires=${expires}; path=/; SameSite=Lax${secure}`;
       };
 
