@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LineIQ — Projekt</title>
+  <meta name="description" content="Projektübersicht: Architektur, Ziele, Komponenten." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Zur Startseite">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-text">LineIQ</span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav-link" href="index.html">Start</a>
+        <a class="nav-link active" href="project.html">Projekt</a>
+        <a class="nav-link" href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-head">
+      <h1>Projekt</h1>
+      <p class="lead">
+        Überblick über Ziel, Architektur und Erweiterungsmöglichkeiten.
+      </p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <h2>Ziel</h2>
+        <p>
+          LineIQ erfasst Produktions-, Fehler- und Nacharbeitszahlen, speichert Auftragsdaten strukturiert
+          und stellt einen Fullscreen-Dashboard-Client bereit.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Komponenten</h2>
+        <ul class="list">
+          <li><span class="dot"></span> Flutter Desktop Dashboard</li>
+          <li><span class="dot"></span> FastAPI Backend (REST)</li>
+          <li><span class="dot"></span> Dienste: Scanner, GPIO, Systemstatus</li>
+          <li><span class="dot"></span> Filesystem-Struktur (Year/Month/Day)</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Architektur (High-Level)</h2>
+        <div class="codebox" role="img" aria-label="Architekturdiagramm als Text">
+<pre>
+[Flutter Dashboard]
+      |
+      |  REST / WebSocket (optional)
+      v
+[FastAPI Server] --- [Scanner Service]
+      |
+      +--- [GPIO / Hardware Service]
+      |
+      +--- [Filesystem Storage]
+</pre>
+        </div>
+      </article>
+    </section>
+
+    <section class="card accent">
+      <h2>Nächste Schritte</h2>
+      <p class="muted">
+        Typische Erweiterungen: Live-Statistiken, Benutzerrollen, Export (CSV/PDF), Health-Checks,
+        lokales Caching, Offline-Modus.
+      </p>
+      <a class="btn primary" href="contact.html">Kontakt aufnehmen</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> LineIQ</span>
+      <span class="muted">Version: v1</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
