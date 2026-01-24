@@ -16,6 +16,7 @@
 </head>
 
 <body>
+  <canvas id="liquid-aurora" aria-hidden="true"></canvas>
   <div class="aurora"></div>
   
   <header class="site-header">
@@ -31,15 +32,15 @@
       </a>
 
       <nav class="nav" role="navigation" aria-label="Hauptnavigation">
-        <a class="nav-link active" href="index.html" aria-current="page">
+        <a class="nav-link active" href="index.html" aria-current="page" data-liquid="1">
           <span class="nav-indicator"></span>
           Start
         </a>
-        <a class="nav-link" href="project.html">
+        <a class="nav-link" href="project.html" data-liquid="1">
           <span class="nav-indicator"></span>
           Projekt
         </a>
-        <a class="nav-link" href="index.html#contact">
+        <a class="nav-link" href="index.html#contact" data-liquid="1">
           <span class="nav-indicator"></span>
           Kontakt
         </a>
@@ -58,7 +59,7 @@
           </div>
           
           <h1 class="hero-title-new">
-            <span class="gradient-text">LineIQ</span>
+            <span class="gradient-text lineiq-anim">LineIQ</span>
             <span class="hero-subtitle-new">Dashboard-System</span>
           </h1>
           
@@ -68,13 +69,13 @@
           </p>
 
           <div class="hero-actions-main">
-            <a class="btn btn-primary" href="project.html">
+            <a class="btn btn-primary" href="project.html" data-liquid="1">
               <span>Projekt erkunden</span>
               <svg width="16" height="16" viewBox="0 0 16 16">
                 <path d="M8 12l4-4-4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
-            <a class="btn btn-secondary" href="#features">
+            <a class="btn btn-secondary" href="#features" data-liquid="1">
               <span>Features ansehen</span>
             </a>
           </div>
@@ -167,7 +168,7 @@
         <div class="about-content-new">
           <h2 class="about-title-new">Über das Projekt</h2>
           <p class="about-description-new">
-            LineIQ ist ein innovatives Schulprojekt, das moderne Webtechnologien 
+            LineIQ ist ein innovatives Techniker-Schulprojekt, das moderne Webtechnologien 
             mit industrieller IoT-Integration verbindet. Es demonstriert die praktische 
             Anwendung von Flutter und FastAPI in einem realen Industriekontext.
           </p>
@@ -175,7 +176,7 @@
           <div class="about-highlights-new">
             <div class="highlight-item-new">
               <div class="highlight-icon-new">🎓</div>
-              <h3>Schulprojekt</h3>
+              <h3>Techniker-Schulprojekt</h3>
               <p>Bildungskonzept für moderne Technologien</p>
             </div>
             
@@ -183,12 +184,6 @@
               <div class="highlight-icon-new">🏭</div>
               <h3>Industriell</h3>
               <p>Powered by Sontheimer Werkzeugmaschinen</p>
-            </div>
-            
-            <div class="highlight-item-new">
-              <div class="highlight-icon-new">🔓</div>
-              <h3>Open Source</h3>
-              <p>Transparenter Code auf GitHub</p>
             </div>
           </div>
         </div>
@@ -227,6 +222,16 @@
       </div>
     </section>
   </main>
+
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie Hinweis" hidden>
+    <div class="cookie-text">
+      Diese Seite wird auf GitHub Pages gehostet. Technisch notwendige Cookies können von GitHub gesetzt werden. Wir setzen ein notwendiges Consent-Cookie/LocalStorage, um deine Auswahl zu merken. Mit "Akzeptieren" stimmst du zu.
+    </div>
+    <div class="cookie-actions">
+      <a class="cookie-btn ghost" href="datenschutz.html">Mehr erfahren</a>
+      <button class="cookie-btn primary" id="cookie-accept" type="button">Akzeptieren</button>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="container">
@@ -267,19 +272,8 @@
       });
     });
 
-    // Aurora animation
-    const aurora = document.querySelector('.aurora');
-    let mouseX = 0, mouseY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX / window.innerWidth;
-      mouseY = e.clientY / window.innerHeight;
-      
-      aurora.style.background = `
-        radial-gradient(800px 400px at ${20 + mouseX * 60}% ${-10 + mouseY * 20}%, rgba(124,92,255,0.4), transparent 50%),
-        radial-gradient(600px 300px at ${80 + mouseX * 20}% ${10 + mouseY * 80}%, rgba(53,208,255,0.3), transparent 50%)
-      `;
-    });
+    // Initialize Liquid Aurora WebGL Background
+    // This replaces the old orb system with a sophisticated fluid simulation
     
     // Accessibility: Focus management
     document.addEventListener('keydown', function(e) {
@@ -291,8 +285,51 @@
     document.addEventListener('mousedown', function() {
       document.body.classList.remove('keyboard-navigation');
     });
+
+    // Cookie consent (GitHub Pages hosting)
+    (function() {
+      const cookieBanner = document.getElementById('cookie-banner');
+      const cookieAccept = document.getElementById('cookie-accept');
+      const cookieKey = 'lineiq-cookie-consent';
+
+      if (!cookieBanner || !cookieAccept) return;
+
+      const hideBanner = () => {
+        cookieBanner.setAttribute('hidden', '');
+        cookieBanner.style.display = 'none';
+      };
+
+      const showBanner = () => {
+        cookieBanner.removeAttribute('hidden');
+        cookieBanner.style.display = 'flex';
+      };
+
+      const hasConsent = () => {
+        try {
+          if (localStorage.getItem(cookieKey) === '1') return true;
+        } catch (e) { /* ignore */ }
+        return document.cookie.split(';').some(c => c.trim() === cookieKey + '=1');
+      };
+
+      const setConsent = () => {
+        try {
+          localStorage.setItem(cookieKey, '1');
+        } catch (e) { /* ignore */ }
+        document.cookie = `${cookieKey}=1; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
+      };
+
+      if (!hasConsent()) {
+        showBanner();
+      }
+
+      cookieAccept.addEventListener('click', function() {
+        setConsent();
+        hideBanner();
+      });
+    })();
   </script>
   
+  <script src="assets/js/liquid-aurora.js"></script>
   <script src="assets/js/components.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@
 </head>
 
 <body>
+  <canvas id="liquid-aurora" aria-hidden="true"></canvas>
   <div class="aurora"></div>
   
   <header class="site-header">
@@ -29,15 +30,15 @@
       </a>
 
       <nav class="nav" role="navigation" aria-label="Hauptnavigation">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="index.html" data-liquid="1">
           <span class="nav-indicator"></span>
           Start
         </a>
-        <a class="nav-link active" href="project.html" aria-current="page">
+        <a class="nav-link active" href="project.html" aria-current="page" data-liquid="1">
           <span class="nav-indicator"></span>
           Projekt
         </a>
-        <a class="nav-link" href="index.html#contact">
+        <a class="nav-link" href="index.html#contact" data-liquid="1">
           <span class="nav-indicator"></span>
           Kontakt
         </a>
@@ -295,21 +296,11 @@
       });
     });
 
-    // Aurora animation
-    const aurora = document.querySelector('.aurora');
-    let mouseX = 0, mouseY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX / window.innerWidth;
-      mouseY = e.clientY / window.innerHeight;
-      
-      aurora.style.background = `
-        radial-gradient(800px 400px at ${20 + mouseX * 60}% ${-10 + mouseY * 20}%, rgba(124,92,255,0.4), transparent 50%),
-        radial-gradient(600px 300px at ${80 + mouseX * 20}% ${10 + mouseY * 80}%, rgba(53,208,255,0.3), transparent 50%)
-      `;
-    });
+    // Initialize Liquid Aurora WebGL Background
+    // This replaces the old orb system with a sophisticated fluid simulation
   </script>
   
+  <script src="assets/js/liquid-aurora.js"></script>
   <script src="assets/js/components.js"></script>
 </body>
 </html>
