@@ -144,8 +144,9 @@ main {
   .site-header {
     position: -webkit-sticky !important;
     position: sticky !important;
-    -webkit-backdrop-filter: blur(25px) !important;
-    background: rgba(15, 17, 20, 0.95) !important;
+    backdrop-filter: blur(18px) saturate(115%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(115%) !important;
+    background: rgba(15, 17, 20, 0.92) !important;
   }
   
   main {
@@ -159,6 +160,18 @@ main {
   .hero-main {
     min-height: -webkit-calc(100vh - 140px) !important;
     min-height: calc(100vh - 140px) !important;
+  }
+
+  #aurora-glass {
+    backdrop-filter: blur(22px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(120%) !important;
+    opacity: 0.75;
+  }
+
+  .cookie-banner {
+    backdrop-filter: blur(14px) saturate(110%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(110%) !important;
+    background: rgba(18, 20, 24, 0.78) !important;
   }
 }
 
@@ -281,26 +294,6 @@ main {
   overflow: hidden;
 }
 
-@supports (-webkit-touch-callout: none) {
-  .site-header {
-    backdrop-filter: blur(18px) saturate(115%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(115%) !important;
-    background: rgba(15, 17, 20, 0.92) !important;
-  }
-
-  #aurora-glass {
-    backdrop-filter: blur(22px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(120%) !important;
-    opacity: 0.75;
-  }
-
-  .cookie-banner {
-    backdrop-filter: blur(14px) saturate(110%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(110%) !important;
-    background: rgba(18, 20, 24, 0.78) !important;
-  }
-}
-
 /* Cookie Banner */
 .cookie-banner {
   position: fixed;
@@ -401,6 +394,14 @@ main {
   filter: blur(120px);
   opacity: 0.4;
   animation: aurora-drift 50s ease-in-out infinite;
+}
+
+@media (max-width: 720px) {
+  .aurora::before {
+    animation: none;
+    filter: blur(90px);
+    opacity: 0.3;
+  }
 }
 
 @keyframes aurora-drift {
