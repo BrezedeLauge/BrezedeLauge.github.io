@@ -55,11 +55,6 @@ class LiquidAurora {
   }
 
   init() {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches || /Mobi|Android/i.test(navigator.userAgent || '');
-    if (isMobile) {
-      this.applyMobileTuning();
-    }
-
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (this.reducedMotion) {
       this.ensureGlassLayer();
