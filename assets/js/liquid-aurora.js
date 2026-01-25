@@ -69,17 +69,7 @@ class LiquidAurora {
     };
 
     // iOS detection + tuning
-    this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    if (!this.isIOS && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-      this.isIOS = true; // iPadOS in desktop mode
-    }
-    if (this.isIOS) {
-      this.dprCap = Math.min(this.dprCap, 1.25);
-      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.18);
-      this.config.glowStrength = Math.min(this.config.glowStrength, 0.04);
-      this.maxAttractors = Math.min(this.maxAttractors, 5); // reduce GPU cost a bit on iOS
-      this.targetFps = Math.min(this.targetFps, 24);
-    }
+    // Keine Begrenzung mehr für iOS – volle Auflösung und Effekte auch auf iPhone/iPad
 
     this.applyPerformanceProfile();
     this.allocateBuffers();
