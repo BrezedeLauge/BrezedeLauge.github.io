@@ -43,7 +43,7 @@
 .team-grid {
   display: flex;
   gap: 32px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-end;
   margin-top: 8px;
   flex-wrap: wrap;
@@ -51,7 +51,7 @@
 .team-member {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
 }
 .team-member img {
@@ -1174,6 +1174,14 @@ main {
 }
 
 .feature-card-new:hover {
+  /* Automatisches Highlight auf Mobile (wie Hover) */
+  .feature-card-new.auto-highlight {
+    box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
+    transform: translateY(-6px) scale(1.035);
+    border-color: var(--accent-secondary);
+    background: rgba(153,199,255,0.10);
+    transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+  }
   box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
   transform: translateY(-6px) scale(1.035);
   border-color: var(--accent-secondary);
@@ -1187,6 +1195,15 @@ main {
 }
 
 .stat-card-new:hover,
+.stat-card-new.auto-highlight,
+.highlight-item-new.auto-highlight,
+.contact-card-new.auto-highlight {
+  box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
+  transform: translateY(-6px) scale(1.035);
+  border-color: var(--accent-secondary);
+  background: rgba(153,199,255,0.10);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+}
 .highlight-item-new:hover,
 .contact-card-new:hover {
   box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
@@ -1196,11 +1213,21 @@ main {
 }
 
 .feature-card-new:hover .feature-icon-new img {
+  .feature-card-new.auto-highlight .feature-icon-new img {
+    filter: drop-shadow(0 0 8px var(--accent-secondary, #99C7FF));
+    transition: filter 0.3s;
+  }
   filter: drop-shadow(0 0 8px var(--accent-secondary, #99C7FF));
   transition: filter 0.3s;
 }
 
 .stat-card-new:hover .stat-icon-new img,
+.stat-card-new.auto-highlight .stat-icon-new img,
+.highlight-item-new.auto-highlight .highlight-icon-new img,
+.contact-card-new.auto-highlight .contact-icon-new img {
+  filter: drop-shadow(0 0 8px var(--accent-secondary, #99C7FF));
+  transition: filter 0.3s;
+}
 .highlight-item-new:hover .highlight-icon-new img,
 .contact-card-new:hover .contact-icon-new img {
   filter: drop-shadow(0 0 8px var(--accent-secondary, #99C7FF));
