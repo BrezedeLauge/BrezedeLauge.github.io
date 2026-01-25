@@ -200,16 +200,26 @@ class LiquidAurora {
       return false;
     }
 
+    // Nutze 100dvh für mobile Safari, um Adressleisten-Springen zu vermeiden
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     Object.assign(this.canvas.style, {
       position: 'fixed',
       top: '0',
       left: '0',
       width: '100%',
-      height: '100%',
+      height: isIOS ? '100dvh' : '100%',
       zIndex: '-2',
       pointerEvents: 'none',
       opacity: String(this.config.canvasOpacity)
     });
+    // Fallback für ältere iOS-Versionen ohne 100dvh
+    if (isIOS && !CSS.supports('height: 100dvh')) {
+      const setCanvasHeight = () => {
+        this.canvas.style.height = window.innerHeight + 'px';
+      };
+      setCanvasHeight();
+      window.addEventListener('resize', setCanvasHeight, { passive: true });
+    }
 
     this.gl = this.canvas.getContext('webgl', { alpha: true, antialias: false })
           || this.canvas.getContext('experimental-webgl');
