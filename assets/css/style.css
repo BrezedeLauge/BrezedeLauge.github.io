@@ -1171,17 +1171,18 @@ main {
   max-width: 350px;
   position: relative;
   overflow: hidden;
+
+}
+
+.feature-card-new.auto-highlight {
+  box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
+  transform: translateY(-6px) scale(1.035);
+  border-color: var(--accent-secondary);
+  background: rgba(153,199,255,0.10);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
 }
 
 .feature-card-new:hover {
-  /* Automatisches Highlight auf Mobile (wie Hover) */
-  .feature-card-new.auto-highlight {
-    box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
-    transform: translateY(-6px) scale(1.035);
-    border-color: var(--accent-secondary);
-    background: rgba(153,199,255,0.10);
-    transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
-  }
   box-shadow: 0 8px 32px 0 rgba(153,199,255,0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
   transform: translateY(-6px) scale(1.035);
   border-color: var(--accent-secondary);
