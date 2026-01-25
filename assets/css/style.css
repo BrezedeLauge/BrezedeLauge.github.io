@@ -76,6 +76,7 @@
 @media (max-width: 700px) {
   .team-grid {
     gap: 16px;
+    justify-content: flex-start;
   }
   .team-member img {
     height: 80px;
