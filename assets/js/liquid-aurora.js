@@ -135,6 +135,11 @@ class LiquidAurora {
     if (this.isInitialized) return;
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (this.isIOS) {
+      this.initStaticFallback();
+      this.isInitialized = true;
+      return;
+    }
     if (this.reducedMotion) {
       this.ensureGlassLayer();
       this.initStaticFallback();
