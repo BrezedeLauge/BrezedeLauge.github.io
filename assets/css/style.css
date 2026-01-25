@@ -271,13 +271,6 @@ main {
   #liquid-aurora {
     opacity: 0.22;
   }
-
-  /* Hide heavy layers entirely on mobile to improve load speed */
-  #aurora-glass,
-  #liquid-aurora,
-  .aurora {
-    display: none;
-  }
 }
 
 /* Fallback for reduced motion accessibility */
