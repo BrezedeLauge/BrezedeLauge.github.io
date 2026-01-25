@@ -99,16 +99,28 @@
 }
 @media (max-width: 700px) {
   .team-grid {
-    gap: 16px;
-    justify-content: flex-start;
+  display: grid;
+  grid-template-columns: auto;
+  gap: 32px;
+
+  justify-items: start;  /* <<< linksbündig innerhalb */
+  text-align: left;
   }
+
+  .team-member {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  }
+
   .team-member img {
-    height: 80px;
-    max-width: 100%;
-    width: auto;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
+    height: 120px !important;
+    max-width: 100% !important;
+    width: auto !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin: 0 !important;
+    text-align: left !important;
   }
 }
 /* Modern LineIQ Design - Flutter Inspired */
