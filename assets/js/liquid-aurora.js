@@ -14,11 +14,16 @@ class LiquidAurora {
     this.program = null;
     this.uniformLocations = {};
 
+    this.isMobile = this.detectMobile();
     this.dprCap = 2.0;
 
     // Attractors: { element, x, y, halfW, halfH, strength, targetStrength, fadeSpeed, isPermanent, isGlowing }
     this.attractors = [];
     this.maxAttractors = 8;
+
+    this._attractorBuffer = null;
+    this._maskBuffer = null;
+    this._glowBuffer = null;
 
     // Time & animation
     this.time = 0; // "time units" used by shader (kept compatible with your tuning)
@@ -36,6 +41,7 @@ class LiquidAurora {
     // Handlers
     this._resizeHandlerAttached = false;
     this._visibilityHandlerAttached = false;
+    this._pageLifecycleAttached = false;
     this._contextHandlersAttached = false;
 
     // Behavior tuning
@@ -74,10 +80,53 @@ class LiquidAurora {
       this.maxAttractors = Math.min(this.maxAttractors, 6); // reduce GPU cost a bit on iOS
     }
 
+    this.applyPerformanceProfile();
+    this.allocateBuffers();
+
     // Bind handlers
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+    this.handlePageHide = this.handlePageHide.bind(this);
+    this.handlePageShow = this.handlePageShow.bind(this);
     this.handleContextLost = this.handleContextLost.bind(this);
     this.handleContextRestored = this.handleContextRestored.bind(this);
+  }
+
+  detectMobile() {
+    const ua = navigator.userAgent || '';
+    const touchCapable = navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+    return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua) || touchCapable;
+  }
+
+  applyPerformanceProfile() {
+    const lowMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 4;
+    const narrowViewport = window.innerWidth && window.innerWidth <= 1024;
+
+    if (this.isMobile || narrowViewport) {
+      this.dprCap = Math.min(this.dprCap, 1.5);
+      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.26);
+      this.config.glowStrength = Math.min(this.config.glowStrength, 0.12);
+      this.maxAttractors = Math.min(this.maxAttractors, 6);
+    }
+
+    if (lowMemory) {
+      this.dprCap = Math.min(this.dprCap, 1.3);
+      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.20);
+      this.config.colorIntensity = Math.min(this.config.colorIntensity, 0.25);
+      this.maxAttractors = Math.min(this.maxAttractors, 5);
+    }
+
+    if (this.isMobile || lowMemory) {
+      this.targetFps = Math.min(this.targetFps, 28);
+    }
+
+    this.frameMs = 1000 / this.targetFps;
+  }
+
+  allocateBuffers() {
+    const max = Math.max(1, this.maxAttractors);
+    this._attractorBuffer = new Float32Array(max * 3);
+    this._maskBuffer = new Float32Array(max * 4);
+    this._glowBuffer = new Float32Array(max * 3);
   }
 
   init() {
@@ -578,9 +627,13 @@ class LiquidAurora {
 
     const activeCount = Math.min(this.attractors.length, this.maxAttractors);
 
-    const attractorData = new Float32Array(this.maxAttractors * 3);
-    const maskData = new Float32Array(this.maxAttractors * 4);
-    const glowData = new Float32Array(this.maxAttractors * 3);
+    if (!this._attractorBuffer || this._attractorBuffer.length !== this.maxAttractors * 3) {
+      this.allocateBuffers();
+    }
+
+    const attractorData = this._attractorBuffer;
+    const maskData = this._maskBuffer;
+    const glowData = this._glowBuffer;
     let glowCount = 0;
 
     for (let i = 0; i < activeCount; i++) {
@@ -601,6 +654,26 @@ class LiquidAurora {
         glowData[glowCount * 3 + 2] = a.strength;
         glowCount++;
       }
+    }
+
+    for (let i = activeCount; i < this.maxAttractors; i++) {
+      const baseIdx = i * 3;
+      attractorData[baseIdx + 0] = 0;
+      attractorData[baseIdx + 1] = 0;
+      attractorData[baseIdx + 2] = 0;
+
+      const maskIdx = i * 4;
+      maskData[maskIdx + 0] = 0;
+      maskData[maskIdx + 1] = 0;
+      maskData[maskIdx + 2] = 0;
+      maskData[maskIdx + 3] = 0;
+    }
+
+    for (let i = glowCount; i < this.maxAttractors; i++) {
+      const glowIdx = i * 3;
+      glowData[glowIdx + 0] = 0;
+      glowData[glowIdx + 1] = 0;
+      glowData[glowIdx + 2] = 0;
     }
 
     gl.uniform3fv(this.uniformLocations.attractors, attractorData);
@@ -653,9 +726,18 @@ class LiquidAurora {
   }
 
   attachVisibilityHandler() {
-    if (this._visibilityHandlerAttached) return;
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
-    this._visibilityHandlerAttached = true;
+    if (!this._visibilityHandlerAttached) {
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+      this._visibilityHandlerAttached = true;
+    }
+
+    if (!this._pageLifecycleAttached) {
+      window.addEventListener('pagehide', this.handlePageHide, { passive: true });
+      window.addEventListener('pageshow', this.handlePageShow, { passive: true });
+      window.addEventListener('blur', this.handlePageHide, { passive: true });
+      window.addEventListener('focus', this.handlePageShow, { passive: true });
+      this._pageLifecycleAttached = true;
+    }
   }
 
   handleVisibilityChange() {
@@ -670,6 +752,24 @@ class LiquidAurora {
     }
 
     if (!this.animationId && !this.reducedMotion) {
+      this._lastFrameTime = performance.now();
+      this._frameAccumulator = 0;
+      this.animate();
+    }
+  }
+
+  handlePageHide() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+    this._lastFrameTime = null;
+    this._frameAccumulator = 0;
+  }
+
+  handlePageShow() {
+    if (this.reducedMotion || document.visibilityState !== 'visible') return;
+    if (!this.animationId) {
       this._lastFrameTime = performance.now();
       this._frameAccumulator = 0;
       this.animate();
