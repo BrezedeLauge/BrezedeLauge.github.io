@@ -1,3 +1,27 @@
+/* Stat-Details-Box unterhalb der Stat-Karten */
+  .stat-details-box {
+    min-height: 56px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    padding: 24px 32px;
+    font-size: 1.08rem;
+    color: var(--text-primary);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .stat-details-box.active {
+    display: block;
+    opacity: 1;
+  }
+@media (max-width: 700px) {
+  .stat-details-box {
+    display: none !important;
+  }
+}
 /* ===================== Team Section ===================== */
 .team-section {
   width: 100%;
@@ -639,10 +663,22 @@ main {
   overflow: hidden;
 }
 
-.nav-link:hover {
-  color: var(--text-primary);
-  background: var(--glass-bg);
-  transform: translateY(-1px);
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;        /* vertikal */
+  justify-content: center;    /* horizontal (für den Inhalt-Block) */
+  gap: 8px;
+
+  height: 40px;               /* <<< ENTSCHEIDEND */
+  padding: 0 16px;            /* vertikales Padding raus */
+  border-radius: var(--radius-sm);
+
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1;             /* <<< sehr wichtig */
+  transition: var(--transition-fast);
 }
 
 .nav-link.active {
@@ -654,12 +690,22 @@ main {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: transparent;
+  background: var(--accent-primary);
+
+  opacity: 0;
+  transform: scale(0.6);
   transition: var(--transition-fast);
 }
 
+.nav-link:hover .nav-indicator {
+  opacity: 0.4;
+  transform: scale(0.8);
+}
+
+
 .nav-link.active .nav-indicator {
-  background: var(--accent-primary);
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Buttons */
@@ -845,16 +891,20 @@ main {
   color: var(--accent-secondary);
   text-align: center;
 }
+/* Stat-Details im Card auf Desktop ausblenden, nur für stat-details-box anzeigen */
 .stat-details-new {
-  display: block;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: opacity 0.3s, max-height 0.3s;
+  display: none;
 }
 .stat-card-new:hover .stat-details-new {
-  max-height: 200px;
-  opacity: 1;
+  display: none;
+}
+@media (max-width: 700px) {
+  .stat-details-new {
+    display: block !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+  }
 }
 @media (max-width: 700px) {
   .stat-details-new {
