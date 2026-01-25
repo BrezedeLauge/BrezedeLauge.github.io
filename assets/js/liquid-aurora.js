@@ -135,11 +135,7 @@ class LiquidAurora {
     if (this.isInitialized) return;
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (this.isIOS) {
-      this.initStaticFallback();
-      this.isInitialized = true;
-      return;
-    }
+    // iOS bekommt wieder die Animation, nur reducedMotion bleibt als Fallback
     if (this.reducedMotion) {
       this.ensureGlassLayer();
       this.initStaticFallback();
