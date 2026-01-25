@@ -455,7 +455,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 24px 0 16px;
 }
 
 .brand {
@@ -472,64 +472,22 @@ main {
 
 .brand-logo {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  align-items: center;
+  justify-content: center;
 }
 
 .brand-logo-image {
   width: clamp(150px, 22vw, 210px);
-  max-width: 150px;
+  max-width: 210px;
   height: auto;
   filter: brightness(1.1);
   transition: var(--transition-fast);
   object-fit: contain;
   display: block;
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
-.lineiq-logo {
-  height: 32px;
-  max-height: 45px;
-  max-width: 180px;
-  width: auto;
-  filter: brightness(1.1);
-  transition: var(--transition-fast);
-  object-fit: contain;
-}
-
-.powered-by {
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  margin-left: 25px;
-}
-
-.powered-text {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 400;
-  text-transform: lowercase;
-  font-style: italic;
-  text-align: left;
-  margin-right: 10px;
-}
-
-.sontheimer-logo {
-  height: 28px;
-  max-height: 35px;
-  max-width: 120px;
-  width: auto;
-  opacity: 0.8;
-  filter: brightness(1.2);
-  transition: var(--transition-fast);
-  align-self: flex-end;
-  object-fit: contain;
-}
-
-.brand:hover .brand-logo-image,
-.brand:hover .lineiq-logo,
-.brand:hover .sontheimer-logo {
+.brand:hover .brand-logo-image {
   filter: brightness(1.3);
 }
 
@@ -1421,21 +1379,9 @@ main {
     gap: var(--spacing-xs);
   }
   
-  .powered-by {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-xs);
-    text-align: center;
-  }
-  
-  .lineiq-logo {
-    max-width: 120px;
-    height: auto;
-  }
-  
-  .sontheimer-logo {
-    max-width: 100px;
-    height: auto;
+  .brand-logo-image,
+  .footer-logo-image {
+    max-width: 160px;
   }
   
   /* Extra padding for mobile header - Universal Support */
@@ -1976,37 +1922,6 @@ main {
   display: block;
 }
 
-.footer-lineiq-logo {
-  height: 28px;
-  width: auto;
-  filter: brightness(1.1);
-}
-
-.footer-powered-by {
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  margin-left: 22px;
-}
-
-.footer-powered-text {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 400;
-  text-transform: lowercase;
-  font-style: italic;
-  text-align: left;
-  margin-right: 8px;
-}
-
-.footer-sontheimer-logo {
-  height: 24px;
-  width: auto;
-  opacity: 0.7;
-  filter: brightness(1.2);
-  align-self: flex-end;
-}
-
 .footer-links {
   display: flex;
   gap: 24px;
@@ -2486,28 +2401,9 @@ main {
     gap: 2px;
   }
   
-  .lineiq-logo {
-    height: 28px;
-  }
-  
-  .powered-text {
-    font-size: 11px;
-  }
-  
-  .sontheimer-logo {
-    height: 24px;
-  }
-  
-  .footer-lineiq-logo {
-    height: 24px;
-  }
-  
-  .footer-powered-text {
-    font-size: 10px;
-  }
-  
-  .footer-sontheimer-logo {
-    height: 20px;
+  .brand-logo-image,
+  .footer-logo-image {
+    max-width: 140px;
   }
 }
 

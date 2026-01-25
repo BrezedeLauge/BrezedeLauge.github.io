@@ -1,9 +1,9 @@
 /**
  * Liquid Aurora WebGL Background System (Uniform Edition)
  * - Consistent effect across ALL interactive elements
- * - No special-cases (mailto etc.)
- * - No selector overlap stacking
  * - Attractor count clamped to shader limit (8)
+ * - WebGL context loss handled (iOS Safari)
+ * - FPS capped to reduce thermal load
  * - No external dependencies
  */
 
@@ -13,27 +13,32 @@ class LiquidAurora {
     this.gl = null;
     this.program = null;
     this.uniformLocations = {};
+
     this.dprCap = 2.0;
 
-    // Attractors: { element, x, y, strength, targetStrength, fadeSpeed, isPermanent, isGlowing }
+    // Attractors: { element, x, y, halfW, halfH, strength, targetStrength, fadeSpeed, isPermanent, isGlowing }
     this.attractors = [];
     this.maxAttractors = 8;
 
-    this.time = 0;
+    // Time & animation
+    this.time = 0; // "time units" used by shader (kept compatible with your tuning)
     this.animationId = null;
     this.reducedMotion = false;
     this.isInitialized = false;
-    this.forceStatic = false;
+
+    // FPS limiting
     this.targetFps = 30;
     this.frameMs = 1000 / this.targetFps;
-    this.referenceFrameMs = 1000 / 60;
+    this.referenceFrameMs = 1000 / 60; // reference for dt-normalization
     this._lastFrameTime = null;
     this._frameAccumulator = 0;
+
+    // Handlers
     this._resizeHandlerAttached = false;
     this._visibilityHandlerAttached = false;
     this._contextHandlersAttached = false;
 
-    // Uniform, consistent behavior tuning (same for every element)
+    // Behavior tuning
     this.behavior = {
       baseStrength: 0.06,
       hoverStrength: 0.30,
@@ -42,10 +47,10 @@ class LiquidAurora {
       removeSpeed: 0.140     // aggressive removal for temporary attractors
     };
 
-    // Visual tuning (WebGL shader)
+    // Visual tuning
     this.config = {
       baseDriftSpeed: 0.0002,
-      viscosity: 0.00000978,
+      viscosity: 0.00000978, // NOTE: uniform exists; shader may not use it
       attractionStrength: 50,
       attractionFalloff: 3.9,
       glowStrength: 0.5,
@@ -53,33 +58,37 @@ class LiquidAurora {
       colorIntensity: 0.3,
       threshold: 0.086,
 
-      // Canvas compositing
       canvasOpacity: 0.5,
       fallbackOpacity: 0.26
     };
 
+    // iOS detection + tuning
     this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     if (!this.isIOS && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-      this.isIOS = true;
+      this.isIOS = true; // iPadOS in desktop mode
     }
     if (this.isIOS) {
       this.dprCap = Math.min(this.dprCap, 1.5);
       this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.22);
       this.config.glowStrength = Math.min(this.config.glowStrength, 0.06);
+      this.maxAttractors = Math.min(this.maxAttractors, 6); // reduce GPU cost a bit on iOS
     }
 
+    // Bind handlers
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
     this.handleContextLost = this.handleContextLost.bind(this);
     this.handleContextRestored = this.handleContextRestored.bind(this);
-
-    // Defer init until explicitly started (see load handler below)
   }
 
   init() {
+    // Avoid double init
+    if (this.isInitialized) return;
+
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (this.reducedMotion) {
       this.ensureGlassLayer();
       this.initStaticFallback();
+      this.isInitialized = true;
       return;
     }
 
@@ -89,22 +98,27 @@ class LiquidAurora {
     if (!this.setupShaders()) return;
 
     this.registerUniformAttractors();
-    // Hover interactions are intentionally disabled for a calmer, filigree aurora
 
     this.attachVisibilityHandler();
+
+    // Reset timing state
     this._lastFrameTime = null;
     this._frameAccumulator = 0;
+
+    // Render 1 frame immediately (helps prevent “blank” first paint)
     this.render(this.referenceFrameMs);
+
+    // Start animation (will immediately re-check visibility)
     this.animate();
     this.isInitialized = true;
 
+    // Ensure correct running state
     this.handleVisibilityChange();
 
-    // If you also have a CSS aurora container, keep it subtle
     const auroraContainer = document.querySelector('.aurora');
     if (auroraContainer) auroraContainer.style.opacity = String(this.config.fallbackOpacity);
 
-    console.log('LiquidAurora: initialized (uniform mode)');
+    console.log('LiquidAurora: initialized');
   }
 
   ensureGlassLayer() {
@@ -115,33 +129,26 @@ class LiquidAurora {
     document.body.appendChild(glass);
   }
 
-  applyMobileTuning() {
-    this.dprCap = 1.5;
-    this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.6);
-    this.config.canvasOpacity = Math.min(this.config.canvasOpacity, 0.32);
-    this.config.baseDriftSpeed = Math.min(this.config.baseDriftSpeed, 0.00012);
-    this.config.glowStrength = Math.min(this.config.glowStrength, 0.32);
-    this.config.colorIntensity = Math.min(this.config.colorIntensity, 0.26);
-    this.maxAttractors = Math.min(this.maxAttractors, 6);
-  }
-
   initStaticFallback() {
     const canvas = document.getElementById('liquid-aurora');
     if (!canvas) return;
-    canvas.style.position = 'fixed';
-    canvas.style.inset = '0';
-    canvas.style.zIndex = '-2';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.opacity = String(this.config.canvasOpacity);
-    canvas.style.background = `
-      radial-gradient(ellipse 820px 420px at 28% 38%,
-        rgba(211,47,47,0.12) 0%,
-        rgba(153,199,255,0.10) 36%,
-        rgba(0,170,0,0.06) 64%,
-        transparent 84%
-      )
-    `;
-    canvas.style.filter = 'blur(48px)';
+
+    Object.assign(canvas.style, {
+      position: 'fixed',
+      inset: '0',
+      zIndex: '-2',
+      pointerEvents: 'none',
+      opacity: String(this.config.canvasOpacity),
+      background: `
+        radial-gradient(ellipse 820px 420px at 28% 38%,
+          rgba(211,47,47,0.12) 0%,
+          rgba(153,199,255,0.10) 36%,
+          rgba(0,170,0,0.06) 64%,
+          transparent 84%
+        )
+      `,
+      filter: 'blur(48px)'
+    });
   }
 
   setupCanvas() {
@@ -151,7 +158,6 @@ class LiquidAurora {
       return false;
     }
 
-    // Style: behind content, does not intercept input
     Object.assign(this.canvas.style, {
       position: 'fixed',
       top: '0',
@@ -165,12 +171,14 @@ class LiquidAurora {
 
     this.gl = this.canvas.getContext('webgl', { alpha: true, antialias: false })
           || this.canvas.getContext('experimental-webgl');
+
     if (!this.gl) {
       console.error('LiquidAurora: WebGL not supported');
       return false;
     }
 
     this.resizeCanvas();
+
     if (!this._resizeHandlerAttached) {
       window.addEventListener('resize', () => this.resizeCanvas(), { passive: true });
       this._resizeHandlerAttached = true;
@@ -187,6 +195,7 @@ class LiquidAurora {
 
   resizeCanvas() {
     if (!this.canvas) return;
+
     const dpr = Math.min(window.devicePixelRatio || 1, this.dprCap);
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -208,11 +217,11 @@ class LiquidAurora {
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-      // Fullscreen quad buffer
       const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
       const vertexBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
       return true;
     } catch (e) {
       console.error('LiquidAurora: initWebGL error', e);
@@ -222,6 +231,7 @@ class LiquidAurora {
 
   setupShaders() {
     const gl = this.gl;
+
     try {
       const vertexShaderSource = `
         attribute vec2 position;
@@ -232,7 +242,6 @@ class LiquidAurora {
         }
       `;
 
-      // Fragment shader: metaball field + attractors (max 8)
       const fragmentShaderSource = `
         #ifdef GL_ES
         precision highp float;
@@ -241,10 +250,10 @@ class LiquidAurora {
         uniform float time;
         uniform vec2 resolution;
 
-        uniform vec3 attractors[8]; // x, y, strength
+        uniform vec3 attractors[8];
         uniform int numAttractors;
 
-        uniform vec3 glowAttractors[8]; // x, y, strength
+        uniform vec3 glowAttractors[8];
         uniform int numGlowAttractors;
 
         uniform float baseDriftSpeed;
@@ -286,7 +295,7 @@ class LiquidAurora {
         }
 
         float rectMask(vec2 p, vec4 rect) {
-          vec2 h = rect.zw * 1.08; // slight padding so long text stays covered
+          vec2 h = rect.zw * 1.08;
           vec2 d = abs(p - rect.xy) - h;
           float dist = max(d.x, d.y);
           return smoothstep(0.05, -0.02, dist);
@@ -311,55 +320,14 @@ class LiquidAurora {
           field += 0.014 / (distance(p2, vec2(0.55, 0.35)) + 0.07);
           field += 0.012 / (distance(p3, vec2(0.45, 0.65)) + 0.10);
 
-          // Unrolled attractor influence (0..7)
-          if (numAttractors >= 1) {
-            vec2 a = attractors[0].xy; float s = attractors[0].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 1 ? rectMask(p, maskRects[0]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 2) {
-            vec2 a = attractors[1].xy; float s = attractors[1].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 2 ? rectMask(p, maskRects[1]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 3) {
-            vec2 a = attractors[2].xy; float s = attractors[2].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 3 ? rectMask(p, maskRects[2]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 4) {
-            vec2 a = attractors[3].xy; float s = attractors[3].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 4 ? rectMask(p, maskRects[3]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 5) {
-            vec2 a = attractors[4].xy; float s = attractors[4].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 5 ? rectMask(p, maskRects[4]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 6) {
-            vec2 a = attractors[5].xy; float s = attractors[5].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 6 ? rectMask(p, maskRects[5]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 7) {
-            vec2 a = attractors[6].xy; float s = attractors[6].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 7 ? rectMask(p, maskRects[6]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
-          if (numAttractors >= 8) {
-            vec2 a = attractors[7].xy; float s = attractors[7].z;
-            float d = distance(p, a);
-            float m = numMaskRects >= 8 ? rectMask(p, maskRects[7]) : 1.0;
-            field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m;
-          }
+          if (numAttractors >= 1) { vec2 a = attractors[0].xy; float s = attractors[0].z; float d = distance(p, a); float m = numMaskRects >= 1 ? rectMask(p, maskRects[0]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 2) { vec2 a = attractors[1].xy; float s = attractors[1].z; float d = distance(p, a); float m = numMaskRects >= 2 ? rectMask(p, maskRects[1]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 3) { vec2 a = attractors[2].xy; float s = attractors[2].z; float d = distance(p, a); float m = numMaskRects >= 3 ? rectMask(p, maskRects[2]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 4) { vec2 a = attractors[3].xy; float s = attractors[3].z; float d = distance(p, a); float m = numMaskRects >= 4 ? rectMask(p, maskRects[3]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 5) { vec2 a = attractors[4].xy; float s = attractors[4].z; float d = distance(p, a); float m = numMaskRects >= 5 ? rectMask(p, maskRects[4]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 6) { vec2 a = attractors[5].xy; float s = attractors[5].z; float d = distance(p, a); float m = numMaskRects >= 6 ? rectMask(p, maskRects[5]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 7) { vec2 a = attractors[6].xy; float s = attractors[6].z; float d = distance(p, a); float m = numMaskRects >= 7 ? rectMask(p, maskRects[6]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
+          if (numAttractors >= 8) { vec2 a = attractors[7].xy; float s = attractors[7].z; float d = distance(p, a); float m = numMaskRects >= 8 ? rectMask(p, maskRects[7]) : 1.0; field += (s / pow(d + 0.04, attractionFalloff)) * attractionStrength * m; }
 
           field += n * 0.35;
           return field;
@@ -395,7 +363,6 @@ class LiquidAurora {
 
           vec3 color = auroraColor(field, p);
 
-          // Cheap glow sampling
           float glow = 0.0;
           float r = 0.02;
           glow += metaballField(p + vec2( 1.0,  0.0) * r);
@@ -407,7 +374,6 @@ class LiquidAurora {
           float glowAlpha = smoothstep(threshold * 0.3, threshold * 0.7, glow);
           color += color * glowAlpha * glowStrength * 0.3;
 
-          // Hover glow (optional)
           float hoverGlow = 0.0;
           for (int i = 0; i < 8; i++) {
             if (i >= numGlowAttractors) break;
@@ -483,11 +449,6 @@ class LiquidAurora {
     return shader;
   }
 
-  /**
-   * UNIFORM ATTRACTOR REGISTRATION
-   * Rule: only elements explicitly selected here get a base attractor.
-   * No overlaps, no nth-child rules, no special cases.
-   */
   registerUniformAttractors() {
     const selector = [
       '.btn',
@@ -554,94 +515,7 @@ class LiquidAurora {
       isGlowing: false
     }));
 
-    console.log(`LiquidAurora: registered ${this.attractors.length}/${candidates.length} shape-aware permanent attractors`);
-  }
-
-  setupHoverHandlers() {
-    // Use same selector set for hover. Additionally, allow opt-in elements via data-liquid="1"
-    const selector = [
-      '.btn',
-      'button',
-      '.nav-link',
-      'a[href]',
-      'h1, h2, h3',
-      '[data-liquid="1"]',
-      '.card',
-      '.kpi'
-    ].join(',');
-
-    const elements = Array.from(document.querySelectorAll(selector))
-      .filter(el => el.offsetWidth > 8 && el.offsetHeight > 8);
-
-    // One unified handler for all elements:
-    elements.forEach(el => {
-      el.addEventListener('mouseenter', () => this.onHover(el), { passive: true });
-      el.addEventListener('mouseleave', () => this.onLeave(el), { passive: true });
-      el.addEventListener('focus', () => this.onHover(el), { passive: true });
-      el.addEventListener('blur', () => this.onLeave(el), { passive: true });
-
-      // Touch: quick “pulse”
-      el.addEventListener('touchstart', () => this.onHover(el), { passive: true });
-      el.addEventListener('touchend', () => this.onLeave(el), { passive: true });
-    });
-  }
-
-  onHover(element) {
-    // If element already has a permanent attractor: boost it
-    const a = this.attractors.find(x => x.isPermanent && x.element === element);
-    if (a) {
-      a.targetStrength = this.behavior.hoverStrength;
-      a.fadeSpeed = this.behavior.riseSpeed;
-      a.isGlowing = true;
-      return;
-    }
-
-    // If not present (because it wasn't in the top 8), we temporarily replace the least important one
-    // to keep exactly 8 and remain uniform.
-    const { x, y, halfW, halfH } = this.getElementCenter(element);
-
-    // Choose a victim: the one with lowest current strength and not glowing
-    let idx = -1;
-    let bestScore = Infinity;
-    for (let i = 0; i < this.attractors.length; i++) {
-      const score = this.attractors[i].strength + (this.attractors[i].isGlowing ? 1 : 0);
-      if (score < bestScore) {
-        bestScore = score;
-        idx = i;
-      }
-    }
-
-    if (idx >= 0) {
-      // Replace in-place to keep maxAttractors stable
-      this.attractors[idx] = {
-        element,
-        x,
-        y,
-        halfW,
-        halfH,
-        strength: this.behavior.baseStrength,
-        targetStrength: this.behavior.hoverStrength,
-        fadeSpeed: this.behavior.riseSpeed,
-        isPermanent: false,
-        isGlowing: true
-      };
-    }
-  }
-
-  onLeave(element) {
-    const a = this.attractors.find(x => x.element === element);
-    if (!a) return;
-
-    if (a.isPermanent) {
-      a.targetStrength = this.behavior.baseStrength;
-      a.fadeSpeed = this.behavior.fallSpeed;
-      a.isGlowing = false;
-    } else {
-      // Fade temporary one back down, then it will be removed/normalized by updateAttractors
-      a.targetStrength = 0.0;
-      a.fadeSpeed = this.behavior.removeSpeed;
-      a.isGlowing = false;
-    }
+    console.log(`LiquidAurora: registered ${this.attractors.length}/${candidates.length} permanent attractors`);
   }
 
   getElementCenter(el) {
@@ -654,11 +528,9 @@ class LiquidAurora {
   }
 
   updateAttractors(deltaMultiplier = 1) {
-    // Smoothly move strengths + update positions
     for (let i = this.attractors.length - 1; i >= 0; i--) {
       const a = this.attractors[i];
 
-      // Update position continuously (layout can shift)
       if (a.element) {
         const rect = a.element.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
@@ -670,17 +542,13 @@ class LiquidAurora {
         }
       }
 
-      // Smooth strength
       a.strength += (a.targetStrength - a.strength) * a.fadeSpeed * deltaMultiplier;
 
-      // Remove temporary if faded out
       if (!a.isPermanent && a.targetStrength === 0.0 && a.strength < 0.01) {
-        // Remove it; keep array length <= maxAttractors but not necessarily exactly max
         this.attractors.splice(i, 1);
       }
     }
 
-    // Hard cap, never exceed 8 (shader limit)
     if (this.attractors.length > this.maxAttractors) {
       this.attractors.length = this.maxAttractors;
     }
@@ -690,6 +558,7 @@ class LiquidAurora {
     if (!this.gl || !this.program) return;
 
     const gl = this.gl;
+
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -716,6 +585,7 @@ class LiquidAurora {
 
     for (let i = 0; i < activeCount; i++) {
       const a = this.attractors[i];
+
       attractorData[i * 3 + 0] = a.x;
       attractorData[i * 3 + 1] = a.y;
       attractorData[i * 3 + 2] = a.strength;
@@ -747,10 +617,12 @@ class LiquidAurora {
 
   animate() {
     if (this.reducedMotion) return;
+
+    // Schedule next tick first (keeps timing stable)
     this.animationId = requestAnimationFrame(() => this.animate());
 
     const now = performance.now();
-    if (!this._lastFrameTime) {
+    if (this._lastFrameTime === null) {
       this._lastFrameTime = now;
       return;
     }
@@ -758,17 +630,26 @@ class LiquidAurora {
     const dt = now - this._lastFrameTime;
     this._lastFrameTime = now;
     this._frameAccumulator += dt;
+
+    // Only render when we accumulated enough time for target FPS
     if (this._frameAccumulator < this.frameMs) return;
 
     const effectiveDt = this._frameAccumulator;
     this._frameAccumulator %= this.frameMs;
+
+    // Keep your existing "time scale" behavior: normalize to 60fps units
     this.time += effectiveDt / this.referenceFrameMs;
-    this.render(this.referenceFrameMs);
+
+    // IMPORTANT FIX: pass effectiveDt into render, not referenceFrameMs
+    this.render(effectiveDt);
   }
 
   destroy() {
     if (this.animationId) cancelAnimationFrame(this.animationId);
+    this.animationId = null;
+
     if (this.gl && this.program) this.gl.deleteProgram(this.program);
+    this.program = null;
   }
 
   attachVisibilityHandler() {
@@ -808,25 +689,33 @@ class LiquidAurora {
 
   handleContextRestored() {
     if (!this.canvas) return;
+
     this.gl = this.canvas.getContext('webgl', { alpha: true, antialias: false })
           || this.canvas.getContext('experimental-webgl');
+
     if (!this.gl) {
       console.error('LiquidAurora: WebGL context restore failed');
       return;
     }
+
     if (!this.initWebGL()) return;
     if (!this.setupShaders()) return;
+
     this.resizeCanvas();
     this._lastFrameTime = null;
     this._frameAccumulator = 0;
+
     this.render(this.referenceFrameMs);
+
     if (!this.reducedMotion) {
       this.animate();
     }
   }
 }
 
-// Auto-init after full load (improves iOS stability)
+/**
+ * Auto-init after full load (improves iOS stability)
+ */
 const startAurora = () => {
   if (!window.liquidAurora) {
     window.liquidAurora = new LiquidAurora();
@@ -838,7 +727,9 @@ window.addEventListener('load', () => {
   setTimeout(startAurora, 250);
 }, { once: true });
 
-// Optional: live tuning during development
+/**
+ * Optional: live tuning during development
+ */
 window.tuneLiquidAurora = (patch) => {
   if (!window.liquidAurora) return;
   Object.assign(window.liquidAurora.config, patch);
