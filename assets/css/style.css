@@ -1,3 +1,135 @@
+/* --- Team Section Styles (BEM) --- */
+.team-section {
+  width: 100%;
+  padding: 4rem 0 3rem 0;
+  display: flex;
+  justify-content: center;
+  background: transparent;
+}
+
+.team-section__container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.team-heading {
+  margin-bottom: 2.5rem;
+}
+
+.team-gradient {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary, #fff);
+  letter-spacing: 0.03em;
+}
+
+.team-subtitle {
+  color: var(--text-secondary, #cfd8dc);
+  font-size: 1.1rem;
+  margin: 0 auto 0.5rem auto;
+  opacity: 0.85;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 2rem;
+  justify-items: center;
+}
+
+.team-card {
+  display: flex;
+  align-items: center;
+  background: rgba(30, 34, 44, 0.7);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
+  padding: 1.5rem 2rem;
+  transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+  min-width: 0;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.team-card:hover, .team-card:focus {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: 0 0 24px 0 rgba(80,180,255,0.18), 0 2px 24px 0 rgba(0,0,0,0.22);
+  outline: none;
+}
+
+.team-avatar {
+  width: 120px;
+  height: 120px;
+  min-width: 120px;
+  min-height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1.7rem;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+  border: 2.5px solid rgba(255,255,255,0.13);
+  background: #23272f;
+  transition: box-shadow 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+.team-info {
+  flex: 1 1 0;
+  text-align: left;
+  min-width: 0;
+}
+
+.team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--accent-primary);
+  letter-spacing: 0.01em;
+}
+
+.team-roles {
+  list-style: disc inside;
+  margin: 0;
+  padding-left: 0.1em;
+  color: var(--text-secondary, #cfd8dc);
+}
+
+.team-roles li::marker {
+  color: var(--accent-primary);   /* <<< Farbe des Punktes */
+}
+
+
+.team-roles li {
+  margin-bottom: 0.2em;
+  padding-left: 0;
+}
+
+/* Responsive: Mobile Layout */
+@media (max-width: 700px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem 0;
+  }
+  .team-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1.2rem 1rem;
+    max-width: 98vw;
+  }
+  .team-avatar {
+    margin: 0 0 1.1rem 0;
+    align-self: center;
+  }
+  .team-info {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Entferne alte .team-member-Regeln, falls vorhanden */
+.team-member { display: none !important; }
 /* Stat-Details-Box unterhalb der Stat-Karten */
   .stat-details-box {
     min-height: 56px;
