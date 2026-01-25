@@ -9,11 +9,7 @@ class WebsiteComponents {
         <div class="container header-inner">
           <a class="brand" href="index.html" aria-label="Zur Startseite">
             <div class="brand-logo">
-              <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
-              <div class="powered-by">
-                <span class="powered-text">powered by</span>
-                <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
-              </div>
+              <img src="assets/pictures/logo.png" alt="LineIQ Dashboard powered by Sontheimer Werkzeugmaschinen" class="brand-logo-image" width="160" height="83" decoding="async" loading="eager">
             </div>
           </a>
 
@@ -43,11 +39,7 @@ class WebsiteComponents {
           <div class="footer-content">
             <div class="footer-brand">
               <div class="brand-logo">
-                <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
-                <div class="powered-by">
-                  <span class="powered-text">powered by</span>
-                  <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
-                </div>
+                <img src="assets/pictures/logo.png" alt="LineIQ Dashboard powered by Sontheimer Werkzeugmaschinen" class="footer-logo-image" width="160" height="83" decoding="async" loading="lazy">
               </div>
               <p>Moderne Dashboard-Lösung für Industrieanwendungen</p>
             </div>

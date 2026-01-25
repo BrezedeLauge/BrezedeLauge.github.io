@@ -6,10 +6,26 @@
   <title>LineIQ — Technische Details</title>
   <meta name="description" content="Detaillierte Projektübersicht: Architektur, Technologien und Implementierung des LineIQ Dashboard-Systems." />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <link rel="preload" href="assets/css/style.css" as="style" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: #0F1114;
+      color: rgba(255, 255, 255, 0.95);
+      font-family: var(--font-sans, "SF Pro Text", "Segoe UI", system-ui, sans-serif);
+    }
+    .container {
+      margin: 0 auto;
+      max-width: 1400px;
+      padding: 0 24px;
+    }
+  </style>
   <link rel="icon" type="image/png" href="assets/pictures/lineiqsymbol.png">
 </head>
 
@@ -19,15 +35,11 @@
   
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Zur Startseite">
-        <div class="brand-logo">
-          <img src="assets/pictures/lineiqlogo.png" alt="LineIQ Dashboard" class="lineiq-logo">
-          <div class="powered-by">
-            <span class="powered-text">powered by</span>
-            <img src="assets/pictures/sontheimerlogo.png" alt="Sontheimer Werkzeugmaschinen" class="sontheimer-logo">
+        <a class="brand" href="index.html" aria-label="Zur Startseite">
+          <div class="brand-logo">
+            <img src="assets/pictures/logo.png" alt="LineIQ Dashboard powered by Sontheimer Werkzeugmaschinen" class="brand-logo-image" width="160" height="83" decoding="async" loading="eager">
           </div>
-        </div>
-      </a>
+        </a>
 
       <nav class="nav" role="navigation" aria-label="Hauptnavigation">
         <a class="nav-link" href="index.html" data-liquid="1">
@@ -284,7 +296,7 @@
 
   <div id="footer"></div>
 
-  <script>
+  <script type="module">
     // Smooth scrolling für Anker-Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -300,7 +312,7 @@
     // This replaces the old orb system with a sophisticated fluid simulation
   </script>
   
-  <script src="assets/js/liquid-aurora.js"></script>
-  <script src="assets/js/components.js"></script>
+  <script defer src="assets/js/liquid-aurora.js"></script>
+  <script defer src="assets/js/components.js"></script>
 </body>
 </html>
