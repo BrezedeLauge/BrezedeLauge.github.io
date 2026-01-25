@@ -272,9 +272,33 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--bg-primary);
+  background:
+    linear-gradient(160deg, rgba(16, 18, 22, 0.65), rgba(16, 18, 22, 0.25)),
+    radial-gradient(520px 360px at 22% 30%, rgba(211, 47, 47, 0.15), transparent),
+    radial-gradient(640px 420px at 78% 60%, rgba(153, 199, 255, 0.18), transparent),
+    var(--bg-primary);
   z-index: -1;
   overflow: hidden;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .site-header {
+    backdrop-filter: blur(18px) saturate(115%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(115%) !important;
+    background: rgba(15, 17, 20, 0.92) !important;
+  }
+
+  #aurora-glass {
+    backdrop-filter: blur(22px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(120%) !important;
+    opacity: 0.75;
+  }
+
+  .cookie-banner {
+    backdrop-filter: blur(14px) saturate(110%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(110%) !important;
+    background: rgba(18, 20, 24, 0.78) !important;
+  }
 }
 
 /* Cookie Banner */
@@ -1449,7 +1473,7 @@ main {
     }
   }
 }
-}
+
 
 .contact::before {
   content: '';
@@ -2717,12 +2741,6 @@ main {
   .legal-subtitle {
     font-size: 18px;
   }
-}
-  gap:10px;
-  text-decoration:none;
-  color: var(--text);
-  font-weight: 700;
-  letter-spacing:.2px;
 }
 .brand-dot{
   width:12px; height:12px; border-radius:999px;

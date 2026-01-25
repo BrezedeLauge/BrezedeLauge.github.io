@@ -6,6 +6,7 @@
   <title>LineIQ — Technische Details</title>
   <meta name="description" content="Detaillierte Projektübersicht: Architektur, Technologien und Implementierung des LineIQ Dashboard-Systems." />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <link rel="canonical" href="https://www.lineiq.de/project.html" />
   <link rel="preload" href="assets/css/style.css" as="style" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <style>
@@ -27,6 +28,7 @@
     }
   </style>
   <link rel="icon" type="image/png" href="assets/pictures/lineiqsymbol.png">
+  <link rel="apple-touch-icon" href="assets/pictures/lineiqsymbol.png">
 </head>
 
 <body>
@@ -294,25 +296,42 @@
     </section>
   </main>
 
-  <div id="footer"></div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <img src="assets/pictures/logo.png" alt="LineIQ Dashboard powered by Sontheimer Werkzeugmaschinen" class="footer-logo-image" width="160" height="83" decoding="async" loading="lazy">
+          </div>
+          <p>Moderne Dashboard-Lösung für Industrieanwendungen</p>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">Start</a>
+          <a href="project.html" aria-current="page">Projekt</a>
+          <a href="index.html#contact">Kontakt</a>
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 LineIQ Dashboard Projekt. Entwickelt mit Flutter & FastAPI.</p>
+      </div>
+    </div>
+  </footer>
 
-  <script type="module">
-    // Smooth scrolling für Anker-Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', event => {
+          const target = document.querySelector(anchor.getAttribute('href'));
+          if (!target) return;
+          event.preventDefault();
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        });
       });
     });
-
-    // Initialize Liquid Aurora WebGL Background
-    // This replaces the old orb system with a sophisticated fluid simulation
   </script>
   
   <script defer src="assets/js/liquid-aurora.js"></script>
-  <script defer src="assets/js/components.js"></script>
 </body>
 </html>
