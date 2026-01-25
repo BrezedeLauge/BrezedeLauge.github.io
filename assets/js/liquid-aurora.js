@@ -74,10 +74,11 @@ class LiquidAurora {
       this.isIOS = true; // iPadOS in desktop mode
     }
     if (this.isIOS) {
-      this.dprCap = Math.min(this.dprCap, 1.5);
-      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.22);
-      this.config.glowStrength = Math.min(this.config.glowStrength, 0.06);
-      this.maxAttractors = Math.min(this.maxAttractors, 6); // reduce GPU cost a bit on iOS
+      this.dprCap = Math.min(this.dprCap, 1.25);
+      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.18);
+      this.config.glowStrength = Math.min(this.config.glowStrength, 0.04);
+      this.maxAttractors = Math.min(this.maxAttractors, 5); // reduce GPU cost a bit on iOS
+      this.targetFps = Math.min(this.targetFps, 24);
     }
 
     this.applyPerformanceProfile();
@@ -823,8 +824,22 @@ const startAurora = () => {
   }
 };
 
+const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+const scheduleAuroraStart = () => {
+  const delayMs = isIOSDevice ? 900 : 250;
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => {
+      setTimeout(startAurora, delayMs);
+    }, { timeout: isIOSDevice ? 1400 : 800 });
+  } else {
+    setTimeout(startAurora, delayMs);
+  }
+};
+
 window.addEventListener('load', () => {
-  setTimeout(startAurora, 250);
+  scheduleAuroraStart();
 }, { once: true });
 
 /**
