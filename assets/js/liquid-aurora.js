@@ -172,6 +172,7 @@ class LiquidAurora {
   }
 
   ensureGlassLayer() {
+    if (this.isIOS) return;
     if (document.getElementById('aurora-glass')) return;
     const glass = document.createElement('div');
     glass.id = 'aurora-glass';

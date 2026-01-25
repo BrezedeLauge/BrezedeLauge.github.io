@@ -144,9 +144,9 @@ main {
   .site-header {
     position: -webkit-sticky !important;
     position: sticky !important;
-    backdrop-filter: blur(12px) saturate(110%) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(110%) !important;
-    background: rgba(15, 17, 20, 0.94) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(15, 17, 20, 0.98) !important;
   }
   
   main {
@@ -163,15 +163,23 @@ main {
   }
 
   #aurora-glass {
-    backdrop-filter: blur(16px) saturate(115%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(115%) !important;
-    opacity: 0.68;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 0.5;
+    mix-blend-mode: normal;
   }
 
   .cookie-banner {
-    backdrop-filter: blur(10px) saturate(105%) !important;
-    -webkit-backdrop-filter: blur(10px) saturate(105%) !important;
-    background: rgba(18, 20, 24, 0.82) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(18, 20, 24, 0.9) !important;
+  }
+
+  .aurora {
+    background:
+      radial-gradient(520px 360px at 25% 35%, rgba(211, 47, 47, 0.12), transparent),
+      linear-gradient(180deg, rgba(16, 18, 22, 0.7), rgba(16, 18, 22, 0.3)),
+      var(--bg-primary);
   }
 
   .aurora::before {
