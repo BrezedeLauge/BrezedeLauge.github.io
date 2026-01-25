@@ -79,6 +79,11 @@
   }
   .team-member img {
     height: 80px;
+    max-width: 100%;
+    width: auto;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
   }
 }
 /* Modern LineIQ Design - Flutter Inspired */
