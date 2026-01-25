@@ -341,7 +341,17 @@
     })();
   </script>
   
-  <script src="assets/js/liquid-aurora.js"></script>
+  <script>
+    // Load aurora only on non-mobile to avoid extra work on iPhone
+    (function() {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches || /Mobi|Android/i.test(navigator.userAgent || '');
+      if (isMobile) return;
+      const s = document.createElement('script');
+      s.src = 'assets/js/liquid-aurora.js';
+      s.defer = true;
+      document.body.appendChild(s);
+    })();
+  </script>
   <script src="assets/js/components.js"></script>
 </body>
 </html>
