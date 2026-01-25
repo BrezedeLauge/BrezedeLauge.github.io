@@ -58,11 +58,10 @@ class LiquidAurora {
     const isMobile = window.matchMedia('(max-width: 768px)').matches || /Mobi|Android/i.test(navigator.userAgent || '');
     if (isMobile) {
       this.applyMobileTuning();
-      this.forceStatic = true; // prefer static fallback on phones for speed
     }
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (this.reducedMotion || this.forceStatic) {
+    if (this.reducedMotion) {
       this.ensureGlassLayer();
       this.initStaticFallback();
       return;
