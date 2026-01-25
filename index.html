@@ -34,7 +34,6 @@
 
 <body>
   <canvas id="liquid-aurora" aria-hidden="true"></canvas>
-  <div class="aurora"></div>
   
   <header class="site-header">
     <div class="container header-inner">
@@ -66,64 +65,92 @@
     <section class="hero-main">
       <div class="container">
         <div class="hero-content-main">
-          <div class="status-badge-main">
-            <div class="status-dot"></div>
-            <span>System Online</span>
-          </div>
           
           <h1 class="hero-title-new">
             <span class="gradient-text lineiq-anim">LineIQ</span>
-            <span class="hero-subtitle-new">Dashboard-System</span>
+            <span class="hero-subtitle-new">Dashboard-System zur KPI-Erfassung</span>
           </h1>
           
           <p class="hero-description-new">
-            Moderne Überwachung und Steuerung von Fertigungsprozessen<br>
-            mit Echtzeit-Analytics und intuitivem Flutter-Interface.
+            LineIQ erfasst, analysiert und visualisiert Fertigungs-KPIs direkt an der Linie.<br>
+            Live-Einblicke in Output, Stillstände und Qualität.<br><br>
+            Modular | Robust | KI-Gestützt | Skalierbar
           </p>
 
           <div class="hero-actions-main">
-            <a class="btn btn-primary" href="project.html" data-liquid="1">
-              <span>Projekt erkunden</span>
+            <a class="btn btn-secondary" href="project.html" data-liquid="1">
+              <span>So funktioniert LineIQ</span>
               <svg width="16" height="16" viewBox="0 0 16 16">
                 <path d="M8 12l4-4-4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
             <a class="btn btn-secondary" href="#features" data-liquid="1">
-              <span>Features ansehen</span>
+              <span>Funktionsumfang entdecken</span>
+              <svg width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8 12l4-4-4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </a>
           </div>
           
           <div class="hero-stats-new">
             <div class="stat-card-new">
-              <div class="stat-icon-new">📱</div>
+              <div class="stat-icon-new"><img src="assets/icons/lucide-flutter.svg" alt="Flutter Icon" width="32" height="32" loading="lazy"></div>
               <div class="stat-content-new">
                 <div class="stat-title-new">Frontend</div>
-                <div class="stat-value-new">Flutter</div>
-                <div class="stat-subtitle-new">Cross-Platform</div>
+                <div class="stat-details-new">
+                  <div class="stat-value-new">Reaktionsschnelles Dashboard</div>
+                  <div class="stat-subtitle-new">Cross-Platform mit Flutter</div>
+                </div>
               </div>
             </div>
-            
             <div class="stat-card-new">
-              <div class="stat-icon-new">⚡</div>
+              <div class="stat-icon-new"><img src="assets/icons/lucide-fastapi.svg" alt="FastAPI Icon" width="32" height="32" loading="lazy"></div>
               <div class="stat-content-new">
                 <div class="stat-title-new">Backend</div>
-                <div class="stat-value-new">FastAPI</div>
-                <div class="stat-subtitle-new">Python API</div>
+                <div class="stat-details-new">
+                  <div class="stat-value-new">Stabil & Echtzeitfähig</div>
+                  <div class="stat-subtitle-new">Python-basiertes Backend</div>
+                </div>
               </div>
             </div>
-            
             <div class="stat-card-new">
-              <div class="stat-icon-new">🔌</div>
+              <div class="stat-icon-new"><img src="assets/icons/lucide-iot.svg" alt="IoT Icon" width="32" height="32" loading="lazy"></div>
               <div class="stat-content-new">
                 <div class="stat-title-new">Integration</div>
-                <div class="stat-value-new">IoT</div>
-                <div class="stat-subtitle-new">Raspberry Pi</div>
+                <div class="stat-details-new">
+                  <div class="stat-value-new">Plug-and-Play</div>
+                  <div class="stat-subtitle-new">Setup mit Raspberry Pi</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+      <div class="container team-container">
+        <div class="team-heading">
+          <h2 class="team-gradient">Menschen hinter LineIQ</h2>
+          <p class="team-subtitle">
+            Praxisnah. Technisch. Lösungsorientiert.
+          </p>
+        </div>
+        <div class="team-grid">
+          <div class="team-member">
+            <img src="assets/pictures/team/Team_Arthur.png" alt="Teammitglied Arthur" />
+          </div>
+          <div class="team-member">
+            <img src="assets/pictures/team/Team_Luis.png" alt="Teammitglied Luis" />
+          </div>
+          <div class="team-member">
+            <img src="assets/pictures/team/Team_Flo.png" alt="Teammitglied Flo" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="aurora"></div>
 
     <!-- Features Section -->
     <section id="features" class="features-main">
@@ -137,37 +164,32 @@
         
         <div class="features-grid-new">
           <div class="feature-card-new">
-            <div class="feature-icon-new">📱</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-flutter.svg" alt="Flutter Icon" width="40" height="40" loading="lazy"></div>
             <h3>Flutter Frontend</h3>
             <p>Cross-platform Benutzeroberfläche mit nativer Performance für Web, Mobile und Desktop</p>
           </div>
-          
           <div class="feature-card-new">
-            <div class="feature-icon-new">⚡</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-fastapi.svg" alt="FastAPI Icon" width="40" height="40" loading="lazy"></div>
             <h3>FastAPI Backend</h3>
             <p>Hochperformante Python API mit automatischer Dokumentation und Typ-Validierung</p>
           </div>
-          
           <div class="feature-card-new">
-            <div class="feature-icon-new">🔄</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-websocket.svg" alt="WebSocket Icon" width="40" height="40" loading="lazy"></div>
             <h3>Echtzeit-Updates</h3>
             <p>Live-Monitoring von Sensoren und Maschinen mit WebSocket-Verbindungen</p>
           </div>
-          
           <div class="feature-card-new">
-            <div class="feature-icon-new">📊</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-analytics.svg" alt="Analytics Icon" width="40" height="40" loading="lazy"></div>
             <h3>Analytics Dashboard</h3>
             <p>Interaktive Diagramme und KPIs für datengetriebene Entscheidungen</p>
           </div>
-          
           <div class="feature-card-new">
-            <div class="feature-icon-new">🔌</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-iot.svg" alt="IoT Icon" width="40" height="40" loading="lazy"></div>
             <h3>IoT Integration</h3>
             <p>Raspberry Pi GPIO-Steuerung und Barcode-Scanner für industrielle Prozesse</p>
           </div>
-          
           <div class="feature-card-new">
-            <div class="feature-icon-new">📁</div>
+            <div class="feature-icon-new"><img src="assets/icons/lucide-storage.svg" alt="Storage Icon" width="40" height="40" loading="lazy"></div>
             <h3>Datenpersistierung</h3>
             <p>Strukturierte JSON-Speicherung mit Backup und Versionierung</p>
           </div>
@@ -188,13 +210,12 @@
           
           <div class="about-highlights-new">
             <div class="highlight-item-new">
-              <div class="highlight-icon-new">🎓</div>
+              <div class="highlight-icon-new"><img src="assets/icons/lucide-education.svg" alt="Education Icon" width="32" height="32" loading="lazy"></div>
               <h3>Techniker-Schulprojekt</h3>
               <p>Bildungskonzept für moderne Technologien</p>
             </div>
-            
             <div class="highlight-item-new">
-              <div class="highlight-icon-new">🏭</div>
+              <div class="highlight-icon-new"><img src="assets/icons/lucide-factory.svg" alt="Factory Icon" width="32" height="32" loading="lazy"></div>
               <h3>Industriell</h3>
               <p>Powered by Sontheimer</p>
             </div>
@@ -214,19 +235,17 @@
           
           <div class="contact-grid-new">
             <div class="contact-card-new">
-              <div class="contact-icon-new">📧</div>
+              <div class="contact-icon-new"><img src="assets/icons/lucide-mail.svg" alt="Mail Icon" width="32" height="32" loading="lazy"></div>
               <h3>E-Mail</h3>
               <p><a href="mailto:info@lineiq.de" class="contact-link-new">info@lineiq.de</a></p>
             </div>
-            
             <div class="contact-card-new">
-              <div class="contact-icon-new">📚</div>
+              <div class="contact-icon-new"><img src="assets/icons/lucide-book.svg" alt="Dokumentation Icon" width="32" height="32" loading="lazy"></div>
               <h3>Dokumentation</h3>
               <p><a href="project.html" class="contact-link-new">Projektstatus ansehen</a></p>
             </div>
-            
             <div class="contact-card-new">
-              <div class="contact-icon-new">📋</div>
+              <div class="contact-icon-new"><img src="assets/icons/lucide-file.svg" alt="Projekt Icon" width="32" height="32" loading="lazy"></div>
               <h3>Projekt</h3>
               <p><a href="project.html" class="contact-link-new">Technische Details</a></p>
             </div>

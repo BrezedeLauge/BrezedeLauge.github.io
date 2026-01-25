@@ -19,7 +19,7 @@ class LiquidAurora {
 
     // Attractors: { element, x, y, halfW, halfH, strength, targetStrength, fadeSpeed, isPermanent, isGlowing }
     this.attractors = [];
-    this.maxAttractors = 8;
+    this.maxAttractors = 16;
 
     this._attractorBuffer = null;
     this._maskBuffer = null;
@@ -56,12 +56,11 @@ class LiquidAurora {
     // Visual tuning
     this.config = {
       baseDriftSpeed: 0.0002,
-      viscosity: 0.00000978, // NOTE: uniform exists; shader may not use it
-      attractionStrength: 50,
+      attractionStrength: 5,
       attractionFalloff: 3.9,
-      glowStrength: 0.5,
+      glowStrength: 1.2, // Erhöht für kräftigeren Blur/Glow auf allen Browsern
       resolutionScale: 0.35,
-      colorIntensity: 0.3,
+      colorIntensity: 0.4,
       threshold: 0.086,
 
       canvasOpacity: 0.5,
