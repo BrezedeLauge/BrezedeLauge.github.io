@@ -24,6 +24,14 @@ class LiquidAurora {
     this.reducedMotion = false;
     this.isInitialized = false;
     this.forceStatic = false;
+    this.targetFps = 30;
+    this.frameMs = 1000 / this.targetFps;
+    this.referenceFrameMs = 1000 / 60;
+    this._lastFrameTime = null;
+    this._frameAccumulator = 0;
+    this._resizeHandlerAttached = false;
+    this._visibilityHandlerAttached = false;
+    this._contextHandlersAttached = false;
 
     // Uniform, consistent behavior tuning (same for every element)
     this.behavior = {
@@ -50,8 +58,21 @@ class LiquidAurora {
       fallbackOpacity: 0.26
     };
 
-    // Delay init to ensure DOM is present
-    setTimeout(() => this.init(), 50);
+    this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (!this.isIOS && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
+      this.isIOS = true;
+    }
+    if (this.isIOS) {
+      this.dprCap = Math.min(this.dprCap, 1.5);
+      this.config.resolutionScale = Math.min(this.config.resolutionScale, 0.22);
+      this.config.glowStrength = Math.min(this.config.glowStrength, 0.06);
+    }
+
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+    this.handleContextLost = this.handleContextLost.bind(this);
+    this.handleContextRestored = this.handleContextRestored.bind(this);
+
+    // Defer init until explicitly started (see load handler below)
   }
 
   init() {
@@ -70,8 +91,14 @@ class LiquidAurora {
     this.registerUniformAttractors();
     // Hover interactions are intentionally disabled for a calmer, filigree aurora
 
+    this.attachVisibilityHandler();
+    this._lastFrameTime = null;
+    this._frameAccumulator = 0;
+    this.render(this.referenceFrameMs);
     this.animate();
     this.isInitialized = true;
+
+    this.handleVisibilityChange();
 
     // If you also have a CSS aurora container, keep it subtle
     const auroraContainer = document.querySelector('.aurora');
@@ -144,7 +171,16 @@ class LiquidAurora {
     }
 
     this.resizeCanvas();
-    window.addEventListener('resize', () => this.resizeCanvas(), { passive: true });
+    if (!this._resizeHandlerAttached) {
+      window.addEventListener('resize', () => this.resizeCanvas(), { passive: true });
+      this._resizeHandlerAttached = true;
+    }
+
+    if (!this._contextHandlersAttached) {
+      this.canvas.addEventListener('webglcontextlost', this.handleContextLost, false);
+      this.canvas.addEventListener('webglcontextrestored', this.handleContextRestored, false);
+      this._contextHandlersAttached = true;
+    }
 
     return true;
   }
@@ -617,7 +653,7 @@ class LiquidAurora {
     return { x: cx, y: cy, halfW, halfH };
   }
 
-  updateAttractors() {
+  updateAttractors(deltaMultiplier = 1) {
     // Smoothly move strengths + update positions
     for (let i = this.attractors.length - 1; i >= 0; i--) {
       const a = this.attractors[i];
@@ -635,7 +671,7 @@ class LiquidAurora {
       }
 
       // Smooth strength
-      a.strength += (a.targetStrength - a.strength) * a.fadeSpeed;
+      a.strength += (a.targetStrength - a.strength) * a.fadeSpeed * deltaMultiplier;
 
       // Remove temporary if faded out
       if (!a.isPermanent && a.targetStrength === 0.0 && a.strength < 0.01) {
@@ -650,7 +686,7 @@ class LiquidAurora {
     }
   }
 
-  render() {
+  render(effectiveDt = this.referenceFrameMs) {
     if (!this.gl || !this.program) return;
 
     const gl = this.gl;
@@ -668,7 +704,8 @@ class LiquidAurora {
     gl.uniform1f(this.uniformLocations.colorIntensity, this.config.colorIntensity);
     gl.uniform1f(this.uniformLocations.threshold, this.config.threshold);
 
-    this.updateAttractors();
+    const deltaMultiplier = Math.min(Math.max(effectiveDt / this.referenceFrameMs, 0), 3);
+    this.updateAttractors(deltaMultiplier);
 
     const activeCount = Math.min(this.attractors.length, this.maxAttractors);
 
@@ -710,21 +747,96 @@ class LiquidAurora {
 
   animate() {
     if (this.reducedMotion) return;
-    this.time += 1.0;
-    this.render();
     this.animationId = requestAnimationFrame(() => this.animate());
+
+    const now = performance.now();
+    if (!this._lastFrameTime) {
+      this._lastFrameTime = now;
+      return;
+    }
+
+    const dt = now - this._lastFrameTime;
+    this._lastFrameTime = now;
+    this._frameAccumulator += dt;
+    if (this._frameAccumulator < this.frameMs) return;
+
+    const effectiveDt = this._frameAccumulator;
+    this._frameAccumulator %= this.frameMs;
+    this.time += effectiveDt / this.referenceFrameMs;
+    this.render(this.referenceFrameMs);
   }
 
   destroy() {
     if (this.animationId) cancelAnimationFrame(this.animationId);
     if (this.gl && this.program) this.gl.deleteProgram(this.program);
   }
+
+  attachVisibilityHandler() {
+    if (this._visibilityHandlerAttached) return;
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    this._visibilityHandlerAttached = true;
+  }
+
+  handleVisibilityChange() {
+    if (document.visibilityState !== 'visible') {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+      this._lastFrameTime = null;
+      this._frameAccumulator = 0;
+      return;
+    }
+
+    if (!this.animationId && !this.reducedMotion) {
+      this._lastFrameTime = performance.now();
+      this._frameAccumulator = 0;
+      this.animate();
+    }
+  }
+
+  handleContextLost(event) {
+    event.preventDefault();
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+    this.program = null;
+    this._lastFrameTime = null;
+    this._frameAccumulator = 0;
+  }
+
+  handleContextRestored() {
+    if (!this.canvas) return;
+    this.gl = this.canvas.getContext('webgl', { alpha: true, antialias: false })
+          || this.canvas.getContext('experimental-webgl');
+    if (!this.gl) {
+      console.error('LiquidAurora: WebGL context restore failed');
+      return;
+    }
+    if (!this.initWebGL()) return;
+    if (!this.setupShaders()) return;
+    this.resizeCanvas();
+    this._lastFrameTime = null;
+    this._frameAccumulator = 0;
+    this.render(this.referenceFrameMs);
+    if (!this.reducedMotion) {
+      this.animate();
+    }
+  }
 }
 
-// Auto-init
-document.addEventListener('DOMContentLoaded', () => {
-  window.liquidAurora = new LiquidAurora();
-});
+// Auto-init after full load (improves iOS stability)
+const startAurora = () => {
+  if (!window.liquidAurora) {
+    window.liquidAurora = new LiquidAurora();
+    window.liquidAurora.init();
+  }
+};
+
+window.addEventListener('load', () => {
+  setTimeout(startAurora, 250);
+}, { once: true });
 
 // Optional: live tuning during development
 window.tuneLiquidAurora = (patch) => {
